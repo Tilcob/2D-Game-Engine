@@ -9,9 +9,7 @@ import com.game.GdxGame;
 import com.game.assets.MapAsset;
 import com.game.input.GameControllerState;
 import com.game.input.KeyboardController;
-import com.game.system.ControllerSystem;
-import com.game.system.MoveSystem;
-import com.game.system.RenderSystem;
+import com.game.system.*;
 import com.game.tiled.TiledAshleyConfigurator;
 import com.game.tiled.TiledManager;
 
@@ -33,6 +31,9 @@ public class GameScreen extends ScreenAdapter {
 
         this.engine.addSystem(new ControllerSystem());
         this.engine.addSystem(new MoveSystem());
+        this.engine.addSystem(new FsmSystem());
+        this.engine.addSystem(new FacingSystem());
+        this.engine.addSystem(new AnimationSystem(game.getAssetManager()));
         this.engine.addSystem(new RenderSystem(game.getBatch(), game.getViewport(), game.getCamera()));
     }
 
