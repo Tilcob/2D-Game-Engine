@@ -6,8 +6,10 @@ import com.badlogic.ashley.systems.SortedIteratingSystem;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.maps.tiled.tiles.AnimatedTiledMapTile;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -15,13 +17,17 @@ import com.game.component.Graphic;
 import com.game.component.Transform;
 import com.game.config.Constants;
 
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 
 public class RenderSystem extends SortedIteratingSystem implements Disposable {
     private final OrthogonalTiledMapRenderer mapRenderer; // TiledMapRenderer is the parent type
     private final Viewport viewport;
     private  final Batch batch;
     private final OrthographicCamera camera;
+    private final List<MapLayer> foreGroundLayers = new ArrayList<>();
+    private final List<MapLayer> backgroundLayers = new ArrayList<>();
 
     public RenderSystem(Batch batch, Viewport viewport, OrthographicCamera camera) {
         super(
@@ -36,14 +42,17 @@ public class RenderSystem extends SortedIteratingSystem implements Disposable {
 
     @Override
     public void update(float deltaTime) {
+        AnimatedTiledMapTile.updateAnimationBaseTime();
         viewport.apply();
+
+        batch.begin();
         batch.setColor(Color.WHITE);
         mapRenderer.setView(camera);
-        mapRenderer.render();
-
+        backgroundLayers.forEach(mapRenderer::renderMapLayer);
         forceSort();
-        batch.begin();
         super.update(deltaTime);
+        batch.setColor(Color.WHITE);
+        foreGroundLayers.forEach(mapRenderer::renderMapLayer);
         batch.end();
     }
 
@@ -73,6 +82,22 @@ public class RenderSystem extends SortedIteratingSystem implements Disposable {
 
     public void setMap(TiledMap map) {
         mapRenderer.setMap(map);
+
+        foreGroundLayers.clear();
+        backgroundLayers.clear();
+        List<MapLayer> currentLayers = backgroundLayers;
+
+        for (MapLayer layer : map.getLayers()) {
+            if (Constants.OBJECT_LAYER.equals(layer.getName())) {
+                currentLayers = foreGroundLayers;
+                continue;
+            }
+            if (layer.getClass().equals(MapLayer.class)) {
+                continue;
+            }
+
+            currentLayers.add(layer);
+        }
     }
 
     @Override

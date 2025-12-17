@@ -33,6 +33,7 @@ public class AssetManager implements Disposable {
     }
 
     public boolean update() {
+        // assetManager.getProgress(); value between 0 and 1
         return assetManager.update();
     }
 

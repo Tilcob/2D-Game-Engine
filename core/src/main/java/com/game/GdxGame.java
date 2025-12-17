@@ -16,6 +16,9 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.game.assets.AssetManager;
 import com.game.config.Constants;
+import com.game.screen.GameScreen;
+import com.game.screen.LoadingScreen;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,8 +44,8 @@ public class GdxGame extends Game {
         fpsLogger = new FPSLogger();
 
         glProfiler.enable();
-        addScreen(new GameScreen(this));
-        setScreen(GameScreen.class);
+        addScreen(new LoadingScreen(this, assetManager));
+        setScreen(LoadingScreen.class);
     }
 
     @Override
@@ -59,12 +62,16 @@ public class GdxGame extends Game {
 
         super.render();
 
-        Gdx.graphics.setTitle("GdxGame - FPS: " + glProfiler.getDrawCalls()); // Draw calls should be minimized!!
+        Gdx.graphics.setTitle("GdxGame - Draw Cals: " + glProfiler.getDrawCalls()); // Draw calls should be minimized!!
         fpsLogger.log();
     }
 
     public void addScreen(Screen screen) {
         screenCache.put(screen.getClass(), screen);
+    }
+
+    public void removeScreen(Screen screen) {
+        screenCache.remove(screen.getClass());
     }
 
     public void setScreen(Class<? extends Screen> screenClass) {
