@@ -1,4 +1,4 @@
-package com.engine.assets;
+package com.game.assets;
 
 import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.maps.tiled.BaseTiledMapLoader;

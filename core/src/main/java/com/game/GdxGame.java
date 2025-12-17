@@ -1,5 +1,6 @@
-package com.engine;
+package com.game;
 
+import com.badlogic.ashley.core.Engine;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -14,9 +15,8 @@ import com.badlogic.gdx.graphics.profiling.GLProfiler;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.engine.assets.AssetService;
-import com.engine.config.Constants;
-
+import com.game.assets.AssetService;
+import com.game.config.Constants;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -60,7 +60,7 @@ public class GdxGame extends Game {
 
         super.render();
 
-        Gdx.graphics.setTitle("GdxGame - Draw Calls: " + glProfiler.getDrawCalls()); // Draw calls should be minimized!!
+        Gdx.graphics.setTitle("GdxGame - FPS: " + glProfiler.getDrawCalls()); // Draw calls should be minimized!!
         fpsLogger.log();
     }
 

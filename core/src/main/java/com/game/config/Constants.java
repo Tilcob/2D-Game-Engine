@@ -1,4 +1,4 @@
-package com.engine.config;
+package com.game.config;
 
 import org.joml.Vector3f;
 

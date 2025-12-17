@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="30" height="20" tilewidth="16" tileheight="16" infinite="0" nextlayerid="5" nextobjectid="6">
+<map version="1.10" tiledversion="1.11.2" orientation="orthogonal" renderorder="right-down" width="30" height="20" tilewidth="16" tileheight="16" infinite="0" nextlayerid="5" nextobjectid="8">
  <tileset firstgid="1" source="terrain.tsx"/>
  <tileset firstgid="193" source="objects.tsx"/>
  <layer id="1" name="Ground" width="30" height="20">
@@ -18,6 +18,8 @@
   <object id="3" gid="195" x="251.333" y="205.333" width="41" height="63"/>
   <object id="4" gid="195" x="365.333" y="89.3333" width="41" height="63"/>
   <object id="5" gid="194" x="346" y="232.667" width="80" height="112"/>
+  <object id="6" gid="197" x="16.6667" y="208.667" width="32" height="32"/>
+  <object id="7" gid="197" x="166.667" y="147.333" width="32" height="32"/>
  </objectgroup>
  <layer id="4" name="Forground" width="30" height="20">
   <data encoding="base64" compression="zlib">

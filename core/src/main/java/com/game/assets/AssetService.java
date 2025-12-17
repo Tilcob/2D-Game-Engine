@@ -1,4 +1,4 @@
-package com.engine.assets;
+package com.game.assets;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
