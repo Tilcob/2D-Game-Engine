@@ -3,14 +3,14 @@ package com.game.screen;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.gdx.ScreenAdapter;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.utils.Disposable;
-import com.badlogic.gdx.utils.viewport.Viewport;
 import com.game.GdxGame;
-import com.game.assets.AssetManager;
 import com.game.assets.MapAsset;
+import com.game.input.GameControllerState;
+import com.game.input.KeyboardController;
+import com.game.system.ControllerSystem;
+import com.game.system.MoveSystem;
 import com.game.system.RenderSystem;
 import com.game.tiled.TiledAshleyConfigurator;
 import com.game.tiled.TiledManager;
@@ -18,30 +18,29 @@ import com.game.tiled.TiledManager;
 import java.util.function.Consumer;
 
 public class GameScreen extends ScreenAdapter {
-    private final GdxGame game;
-    private final Batch batch;
-    private final AssetManager assetManager;
-    private final Viewport viewport;
-    private final OrthographicCamera camera;
     private final Engine engine;  // Could also be done with PoolingEngine for better performance in Java
     private final TiledManager tiledManager;
     private final TiledAshleyConfigurator tiledAshleyConfigurator;
+    private final KeyboardController keyboardController;
+    private final GdxGame game;
 
     public GameScreen(GdxGame game) {
         this.game = game;
-        this.batch = game.getBatch();
-        this.assetManager = game.getAssetService();
-        this.viewport = game.getViewport();
-        this.camera = game.getCamera();
-        this.tiledManager = new TiledManager(assetManager);
+        this.tiledManager = new TiledManager(game.getAssetManager());
         this.engine = new Engine();
-        this.tiledAshleyConfigurator = new TiledAshleyConfigurator(engine, assetManager);
+        this.tiledAshleyConfigurator = new TiledAshleyConfigurator(engine, game.getAssetManager());
+        this.keyboardController = new KeyboardController(GameControllerState.class, engine);
 
-        this.engine.addSystem(new RenderSystem(batch, viewport, camera));
+        this.engine.addSystem(new ControllerSystem());
+        this.engine.addSystem(new MoveSystem());
+        this.engine.addSystem(new RenderSystem(game.getBatch(), game.getViewport(), game.getCamera()));
     }
 
     @Override
     public void show() {
+        game.setInputProcessors(keyboardController);
+        keyboardController.setActiveState(GameControllerState.class);
+
         Consumer<TiledMap> renderConsumer = engine.getSystem(RenderSystem.class)::setMap;
         tiledManager.setMapChangeConsumer(renderConsumer);
         tiledManager.setLoadObjectConsumer(tiledAshleyConfigurator::onLoadObject);

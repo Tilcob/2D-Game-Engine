@@ -1,9 +1,6 @@
 package com.game;
 
-import com.badlogic.gdx.Application;
-import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.*;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.graphics.GL20;
@@ -16,8 +13,8 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.game.assets.AssetManager;
 import com.game.config.Constants;
-import com.game.screen.GameScreen;
 import com.game.screen.LoadingScreen;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -30,11 +27,14 @@ public class GdxGame extends Game {
     private AssetManager assetManager;
     private GLProfiler glProfiler;
     private FPSLogger fpsLogger;
+    private InputMultiplexer inputMultiplexer;
     private final Map<Class<? extends Screen>, Screen> screenCache = new HashMap<>();
 
     @Override
     public void create() {
         Gdx.app.setLogLevel(Application.LOG_DEBUG);
+        inputMultiplexer = new InputMultiplexer();
+        Gdx.input.setInputProcessor(inputMultiplexer);
 
         batch = new SpriteBatch();
         camera = new OrthographicCamera();
@@ -103,7 +103,16 @@ public class GdxGame extends Game {
         return viewport;
     }
 
-    public AssetManager getAssetService() {
+    public AssetManager getAssetManager() {
         return assetManager;
+    }
+
+    public void setInputProcessors(InputProcessor... processors) {
+        inputMultiplexer.clear();
+        if (processors == null) return;
+
+        for (InputProcessor processor : processors) {
+            inputMultiplexer.addProcessor(processor);
+        }
     }
 }

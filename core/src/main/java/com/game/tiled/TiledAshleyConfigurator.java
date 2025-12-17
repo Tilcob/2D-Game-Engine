@@ -12,7 +12,9 @@ import com.badlogic.gdx.maps.tiled.objects.TiledMapTileMapObject;
 import com.badlogic.gdx.math.Vector2;
 import com.game.assets.AssetManager;
 import com.game.assets.AtlasAsset;
+import com.game.component.Controller;
 import com.game.component.Graphic;
+import com.game.component.Move;
 import com.game.component.Transform;
 import com.game.config.Constants;
 
@@ -37,8 +39,24 @@ public class TiledAshleyConfigurator {
             region.getRegionWidth(), region.getRegionHeight(),
             object.getScaleX(), object.getScaleY(), entity
         );
+        addEntityController(object, entity);
+        addEntityMove(tile, entity);
 
         engine.addEntity(entity);
+    }
+
+    private void addEntityMove(TiledMapTile tile, Entity entity) {
+        float speed = tile.getProperties().get("speed", 0f, Float.class);
+        if (speed == 0) return;
+
+        entity.add(new Move(speed));
+    }
+
+    private void addEntityController(TiledMapTileMapObject object, Entity entity) {
+        boolean controller = object.getProperties().get("controller", false, Boolean.class);
+        if(!controller) return;
+
+        entity.add(new Controller());
     }
 
     private void addEntityTransform(float x, float y, int z, float w, float h,
