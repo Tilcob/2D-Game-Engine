@@ -14,4 +14,10 @@ public class Constants {
 
     // Light
     public static final Vector3f AMBIENT_LIGHT = new Vector3f(.3f,.3f,.3f);
+
+    // Tiled Layers
+    public static final String OBJECT_LAYER = "Objects";
+    public static final String GROUND_LAYER = "Ground";
+    public static final String BACKGROUND_LAYER = "Background";
+    public static final String FORE_LAYER = "Foreground";
 }

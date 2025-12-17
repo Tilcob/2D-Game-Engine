@@ -1,6 +1,5 @@
 package com.game;
 
-import com.badlogic.ashley.core.Engine;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -15,7 +14,7 @@ import com.badlogic.gdx.graphics.profiling.GLProfiler;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.game.assets.AssetService;
+import com.game.assets.AssetManager;
 import com.game.config.Constants;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,7 +24,7 @@ public class GdxGame extends Game {
     private Batch batch;
     private OrthographicCamera camera;
     private Viewport viewport;
-    private AssetService assetService;
+    private AssetManager assetManager;
     private GLProfiler glProfiler;
     private FPSLogger fpsLogger;
     private final Map<Class<? extends Screen>, Screen> screenCache = new HashMap<>();
@@ -37,7 +36,7 @@ public class GdxGame extends Game {
         batch = new SpriteBatch();
         camera = new OrthographicCamera();
         viewport = new FitViewport(Constants.WIDTH, Constants.HEIGHT, camera);
-        assetService = new AssetService(new InternalFileHandleResolver());
+        assetManager = new AssetManager(new InternalFileHandleResolver());
         glProfiler = new GLProfiler(Gdx.graphics);
         fpsLogger = new FPSLogger();
 
@@ -81,8 +80,8 @@ public class GdxGame extends Game {
         screenCache.values().forEach(Screen::dispose);
         screenCache.clear();
         batch.dispose();
-        assetService.debugDiagnostics();
-        assetService.dispose();
+        assetManager.debugDiagnostics();
+        assetManager.dispose();
     }
 
     public Batch getBatch() {
@@ -97,7 +96,7 @@ public class GdxGame extends Game {
         return viewport;
     }
 
-    public AssetService getAssetService() {
-        return assetService;
+    public AssetManager getAssetService() {
+        return assetManager;
     }
 }
