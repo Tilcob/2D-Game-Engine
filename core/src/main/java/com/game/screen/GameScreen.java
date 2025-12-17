@@ -1,4 +1,4 @@
-package com.game;
+package com.game.screen;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.EntitySystem;
@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.game.GdxGame;
 import com.game.assets.AssetManager;
 import com.game.assets.MapAsset;
 import com.game.system.RenderSystem;

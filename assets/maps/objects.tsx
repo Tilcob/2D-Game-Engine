@@ -5,15 +5,20 @@
   <image source="objects/chest.png" width="16" height="16"/>
  </tile>
  <tile id="1">
+  <properties>
+   <property name="atlasAsset" value="OBJECTS"/>
+  </properties>
   <image source="objects/house.png" width="80" height="112"/>
  </tile>
  <tile id="2">
+  <properties>
+   <property name="atlasAsset" value="OBJECTS"/>
+  </properties>
   <image source="objects/oak_tree.png" width="41" height="63"/>
  </tile>
  <tile id="3">
   <properties>
-   <property name="life" type="float" value="10"/>
-   <property name="speed" type="float" value="3"/>
+   <property name="atlasAsset" value="OBJECTS"/>
   </properties>
   <image source="objects/player.png" width="32" height="32"/>
  </tile>
