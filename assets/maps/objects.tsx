@@ -19,6 +19,7 @@
  <tile id="3">
   <properties>
    <property name="atlasAsset" value="OBJECTS"/>
+   <property name="speed" type="float" value="4"/>
   </properties>
   <image source="objects/player.png" width="32" height="32"/>
  </tile>

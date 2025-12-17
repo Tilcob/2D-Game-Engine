@@ -13,7 +13,11 @@
   </data>
  </layer>
  <objectgroup id="3" name="objects">
-  <object id="1" name="Player" gid="196" x="81" y="305.667" width="32" height="32"/>
+  <object id="1" name="Player" gid="196" x="81" y="305.667" width="32" height="32">
+   <properties>
+    <property name="controller" type="bool" value="true"/>
+   </properties>
+  </object>
   <object id="2" gid="195" x="68.6667" y="301.333" width="41" height="63"/>
   <object id="3" gid="195" x="251.333" y="205.333" width="41" height="63"/>
   <object id="4" gid="195" x="365.333" y="89.3333" width="41" height="63"/>

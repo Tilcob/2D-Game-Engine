@@ -47,7 +47,7 @@
         "hero.tsx"
     ],
     "project": "gameworld.tiled-project",
-    "property.type": "string",
+    "property.type": "float",
     "recentFiles": [
         "hero.tsx",
         "terrain.tsx",
