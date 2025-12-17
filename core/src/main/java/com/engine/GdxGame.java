@@ -1,11 +1,16 @@
 package com.engine;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
+import com.badlogic.gdx.graphics.FPSLogger;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.profiling.GLProfiler;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -21,15 +26,22 @@ public class GdxGame extends Game {
     private OrthographicCamera camera;
     private Viewport viewport;
     private AssetService assetService;
+    private GLProfiler glProfiler;
+    private FPSLogger fpsLogger;
     private final Map<Class<? extends Screen>, Screen> screenCache = new HashMap<>();
 
     @Override
     public void create() {
+        Gdx.app.setLogLevel(Application.LOG_DEBUG);
+
         batch = new SpriteBatch();
         camera = new OrthographicCamera();
         viewport = new FitViewport(Constants.WIDTH, Constants.HEIGHT, camera);
         assetService = new AssetService(new InternalFileHandleResolver());
+        glProfiler = new GLProfiler(Gdx.graphics);
+        fpsLogger = new FPSLogger();
 
+        glProfiler.enable();
         addScreen(new GameScreen(this));
         setScreen(GameScreen.class);
     }
@@ -38,6 +50,18 @@ public class GdxGame extends Game {
     public void resize(int width, int height) {
         viewport.update(width, height, true);
         super.resize(width, height);
+    }
+
+    @Override
+    public void render() {
+        glProfiler.reset();
+        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        super.render();
+
+        Gdx.graphics.setTitle("GdxGame - Draw Calls: " + glProfiler.getDrawCalls()); // Draw calls should be minimized!!
+        fpsLogger.log();
     }
 
     public void addScreen(Screen screen) {
