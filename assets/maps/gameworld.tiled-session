@@ -1,0 +1,67 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "main.tmx",
+    "expandedProjectPaths": [
+        "."
+    ],
+    "fileStates": {
+        "Objetcs.tsx": {
+            "dynamicWrapping": true,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "hero.tsx": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "main.tmx": {
+            "scale": 0.61453125,
+            "selectedLayer": 0,
+            "viewCenter": {
+                "x": 453.1909483854564,
+                "y": 412.5095347063311
+            }
+        },
+        "objects.tsx": {
+            "dynamicWrapping": true
+        },
+        "terrain.tsx": {
+            "dynamicWrapping": false,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        }
+    },
+    "frame.defaultDuration": 200,
+    "last.imagePath": "C:/01_Programmieren/Java/GDX/2D-Game-Engine/assets/maps/objects",
+    "map.lastUsedFormat": "tmx",
+    "map.layerDataFormat": "3",
+    "map.tileHeight": 16,
+    "map.tileWidth": 16,
+    "openFiles": [
+        "main.tmx",
+        "terrain.tsx",
+        "hero.tsx"
+    ],
+    "project": "gameworld.tiled-project",
+    "property.type": "color",
+    "recentFiles": [
+        "hero.tsx",
+        "terrain.tsx",
+        "main.tmx",
+        "Objetcs.tsx"
+    ],
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.margin": 8,
+    "tileset.spacing": 16,
+    "tileset.tileSize": {
+        "height": 16,
+        "width": 16
+    },
+    "tileset.transparentColor": "#000000",
+    "tileset.type": 1,
+    "tileset.useTransparentColor": false
+}
