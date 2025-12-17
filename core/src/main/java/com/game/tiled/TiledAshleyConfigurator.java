@@ -3,7 +3,7 @@ package com.game.tiled;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.TextureData;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.FileTextureData;
@@ -12,10 +12,7 @@ import com.badlogic.gdx.maps.tiled.objects.TiledMapTileMapObject;
 import com.badlogic.gdx.math.Vector2;
 import com.game.assets.AssetManager;
 import com.game.assets.AtlasAsset;
-import com.game.component.Controller;
-import com.game.component.Graphic;
-import com.game.component.Move;
-import com.game.component.Transform;
+import com.game.component.*;
 import com.game.config.Constants;
 
 public class TiledAshleyConfigurator {
@@ -31,7 +28,7 @@ public class TiledAshleyConfigurator {
         Entity entity = engine.createEntity();
         TiledMapTile tile = object.getTile();
         TextureRegion region = getTextureRegion(tile);
-        int z = tile.getProperties().get("z", 1, Integer.class);
+        int z = tile.getProperties().get(Constants.Z, 1, Integer.class);
 
         entity.add(new Graphic(Color.WHITE.cpy(), region));
         addEntityTransform(
@@ -41,19 +38,37 @@ public class TiledAshleyConfigurator {
         );
         addEntityController(object, entity);
         addEntityMove(tile, entity);
+        addEntityAnimation(tile, entity);
+        entity.add(new Facing(Facing.FacingDirection.DOWN));
+        entity.add(new Fsm(entity));
 
         engine.addEntity(entity);
     }
 
+    private void addEntityAnimation(TiledMapTile tile, Entity entity) {
+        String animationStr = tile.getProperties().get(Constants.ANIMATION, "", String.class);
+        if (animationStr.isBlank()) return;
+
+        Animation2D.AnimationType animationType = Animation2D.AnimationType.valueOf(animationStr);
+        String atlasAssetStr = tile.getProperties().get(Constants.ATLAS_ASSET, AtlasAsset.OBJECTS.name(), String.class);
+        AtlasAsset atlasAsset = AtlasAsset.valueOf(atlasAssetStr);
+        TextureAtlas textureAtlas = assetManager.get(atlasAsset);
+        FileTextureData textureData = (FileTextureData) tile.getTextureRegion().getTexture().getTextureData();
+        String atlasKey = textureData.getFileHandle().nameWithoutExtension();
+        float animationSpeed = tile.getProperties().get(Constants.ANIMATION_SPEED, 0f, Float.class);
+
+        entity.add(new Animation2D(atlasAsset, atlasKey, animationType, Animation.PlayMode.LOOP, animationSpeed));
+    }
+
     private void addEntityMove(TiledMapTile tile, Entity entity) {
-        float speed = tile.getProperties().get("speed", 0f, Float.class);
+        float speed = tile.getProperties().get(Constants.SPEED, 0f, Float.class);
         if (speed == 0) return;
 
         entity.add(new Move(speed));
     }
 
     private void addEntityController(TiledMapTileMapObject object, Entity entity) {
-        boolean controller = object.getProperties().get("controller", false, Boolean.class);
+        boolean controller = object.getProperties().get(Constants.CONTROLLER, false, Boolean.class);
         if(!controller) return;
 
         entity.add(new Controller());
@@ -72,7 +87,7 @@ public class TiledAshleyConfigurator {
     }
 
     private TextureRegion getTextureRegion(TiledMapTile tile) {
-        String atlasAssetStr = tile.getProperties().get("atlasAsset", AtlasAsset.OBJECTS.name(), String.class);
+        String atlasAssetStr = tile.getProperties().get(Constants.ATLAS_ASSET, AtlasAsset.OBJECTS.name(), String.class);
         AtlasAsset atlasAsset = AtlasAsset.valueOf(atlasAssetStr);
         TextureAtlas textureAtlas = assetManager.get(atlasAsset);
         FileTextureData textureData = (FileTextureData) tile.getTextureRegion().getTexture().getTextureData();

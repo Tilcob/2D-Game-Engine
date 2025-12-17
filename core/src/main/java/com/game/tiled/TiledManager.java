@@ -27,13 +27,13 @@ public class TiledManager {
 
     public TiledMap loadMap(MapAsset mapAsset){
         TiledMap tiledMap = assetManager.load(mapAsset);
-        tiledMap.getProperties().put("mapAsset", mapAsset);
+        tiledMap.getProperties().put(Constants.MAP_ASSET, mapAsset);
         return tiledMap;
     }
 
     public void setMap(TiledMap map) {
         if (currentMap != null) {
-            assetManager.unload(currentMap.getProperties().get("mapAsset", MapAsset.class));
+            assetManager.unload(currentMap.getProperties().get(Constants.MAP_ASSET, MapAsset.class));
         }
         currentMap = map;
         loadMapObjects(map);
