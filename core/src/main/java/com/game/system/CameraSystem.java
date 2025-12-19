@@ -16,24 +16,29 @@ public class CameraSystem extends IteratingSystem {
     private final Vector2 targetPosition;
     private float mapWidth;
     private float mapHeight;
+    private float final float smoothingFactor;
 
     public CameraSystem(Camera camera) {
         super(Family.all(CameraFollow.class, Transform.class).get());
         this.camera = camera;
         this.targetPosition = new Vector2();
+        this.smoothingFactor = 4f;
     }
 
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
         Transform transform = Transform.MAPPER.get(entity);
-
         calcTargetPosition(transform.getPosition());
-        camera.position.set(targetPosition.x, targetPosition.y, camera.position.z);
+
+        float progress = smoothingFactor * deltaTime;
+        float smoothedX = MathUtils.lerp(camera.position.x, targetPosition.x, progress);
+        float smoothedY = MathUtils.lerp(camera.position.y, targetPosition.y, progress);
+        camera.position.set(smoothedX, smoothedY, camera.position.z);
     }
 
     private void calcTargetPosition(Vector2 entityPosition) {
         float targetX = entityPosition.x;
-        float targetY = entityPosition.y;
+        float targetY = entityPosition.y + Constants.CAMERA_OFFSET_Y;
         float cameraHalfWidth = camera.viewportWidth * .5f;
         float cameraHalfHeight = camera.viewportHeight * .5f;
 

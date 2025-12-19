@@ -58,4 +58,7 @@ public class Constants {
     public static final Vector2 GRAVITY = Vector2.Zero;
     public static final Vector2 DEFAULT_PHYSIC_SCALING = new Vector2(1f,1f);
     public static final int MAX_NUM_OF_VERTICES = 8; // must be in between 3 and 8
+
+    // Camera
+    public static final float CAMERA_OFFSET_Y = 1f;
 }
