@@ -40,6 +40,7 @@ public class GameScreen extends ScreenAdapter {
         this.engine.addSystem(new FacingSystem());
         this.engine.addSystem(new PhysicSystem(physicWorld, Constants.FIXED_INTERVAL));
         this.engine.addSystem(new AnimationSystem(game.getAssetManager()));
+        this.engine.addSystem(new CameraSystem(game.getCamera()));
         this.engine.addSystem(new RenderSystem(game.getBatch(), game.getViewport(), game.getCamera()));
         this.engine.addSystem(new PhysicDebugRenderSystem(physicWorld, game.getCamera()));
     }
@@ -50,7 +51,8 @@ public class GameScreen extends ScreenAdapter {
         keyboardController.setActiveState(GameControllerState.class);
 
         Consumer<TiledMap> renderConsumer = engine.getSystem(RenderSystem.class)::setMap;
-        tiledManager.setMapChangeConsumer(renderConsumer);
+        Consumer<TiledMap> cameraConsumer = engine.getSystem(CameraSystem.class)::setMap;
+        tiledManager.setMapChangeConsumer(renderConsumer.andThen(cameraConsumer));
         tiledManager.setLoadObjectConsumer(tiledAshleyConfigurator::onLoadObject);
         tiledManager.setLoadTileConsumer(tiledAshleyConfigurator::onLoadTile);
 

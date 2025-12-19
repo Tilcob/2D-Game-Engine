@@ -12,12 +12,20 @@
    <property name="atlasAsset" value="OBJECTS"/>
   </properties>
   <image source="objects/house.png" width="80" height="112"/>
+  <objectgroup draworder="index" id="2">
+   <object id="1" x="9.33333" y="33.6667" width="62" height="71.6667"/>
+  </objectgroup>
  </tile>
  <tile id="2" type="Prop">
   <properties>
    <property name="atlasAsset" value="OBJECTS"/>
   </properties>
   <image source="objects/oak_tree.png" width="41" height="63"/>
+  <objectgroup draworder="index" id="2">
+   <object id="3" x="26.375" y="42.25">
+    <polygon points="0,0 -10.375,0.125 -11,5.625 -14,11 -6.25,13.375 3.125,10.625 -0.125,5.75"/>
+   </object>
+  </objectgroup>
  </tile>
  <tile id="3" type="GameObject">
   <properties>
