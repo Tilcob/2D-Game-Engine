@@ -19,20 +19,22 @@
             "scaleInEditor": 1
         },
         "main.tmx": {
-            "scale": 0.61453125,
-            "selectedLayer": 0,
+            "scale": 1.5,
+            "selectedLayer": 2,
             "viewCenter": {
-                "x": 453.1909483854564,
-                "y": 412.5095347063311
+                "x": 177.33333333333331,
+                "y": 191.66666666666669
             }
         },
         "objects.tsx": {
-            "dynamicWrapping": true
+            "dynamicWrapping": true,
+            "scaleInDock": 1,
+            "scaleInEditor": 2
         },
         "terrain.tsx": {
             "dynamicWrapping": false,
             "scaleInDock": 1,
-            "scaleInEditor": 1
+            "scaleInEditor": 2
         }
     },
     "frame.defaultDuration": 200,
@@ -44,14 +46,15 @@
     "openFiles": [
         "main.tmx",
         "terrain.tsx",
-        "hero.tsx"
+        "objects.tsx"
     ],
     "project": "gameworld.tiled-project",
     "property.type": "float",
     "recentFiles": [
-        "hero.tsx",
+        "objects.tsx",
         "terrain.tsx",
         "main.tmx",
+        "hero.tsx",
         "Objetcs.tsx"
     ],
     "tileset.lastUsedFormat": "tsx",

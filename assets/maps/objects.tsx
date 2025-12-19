@@ -7,19 +7,19 @@
   </properties>
   <image source="objects/chest.png" width="16" height="16"/>
  </tile>
- <tile id="1">
+ <tile id="1" type="Prop">
   <properties>
    <property name="atlasAsset" value="OBJECTS"/>
   </properties>
   <image source="objects/house.png" width="80" height="112"/>
  </tile>
- <tile id="2">
+ <tile id="2" type="Prop">
   <properties>
    <property name="atlasAsset" value="OBJECTS"/>
   </properties>
   <image source="objects/oak_tree.png" width="41" height="63"/>
  </tile>
- <tile id="3">
+ <tile id="3" type="GameObject">
   <properties>
    <property name="animation" value="IDLE"/>
    <property name="animationSpeed" type="float" value="1"/>
@@ -27,6 +27,11 @@
    <property name="speed" type="float" value="4"/>
   </properties>
   <image source="objects/player.png" width="32" height="32"/>
+  <objectgroup draworder="index" id="5">
+   <object id="6" x="9.54545" y="18" width="11.9091" height="4.90909">
+    <ellipse/>
+   </object>
+  </objectgroup>
  </tile>
  <tile id="4">
   <properties>

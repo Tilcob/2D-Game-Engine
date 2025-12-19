@@ -1,5 +1,6 @@
 package com.game.config;
 
+import com.badlogic.gdx.math.Vector2;
 import org.joml.Vector3f;
 
 public class Constants {
@@ -14,6 +15,8 @@ public class Constants {
 
     public static final float FRAME_DURATION = 1 / 8f;
 
+    public static final float FIXED_INTERVAL = 1 / 60f;
+
     // Light
     public static final Vector3f AMBIENT_LIGHT = new Vector3f(.3f,.3f,.3f);
 
@@ -23,6 +26,9 @@ public class Constants {
     public static final String BACKGROUND_LAYER = "background";
     public static final String FORE_LAYER = "foreground";
 
+
+    public static final String ENVIRONMENT = "environment";
+
     // Tiled: Custom Properties
     public static final String ANIMATION = "animation";
     public static final String ATLAS_ASSET = "atlasAsset";
@@ -31,4 +37,15 @@ public class Constants {
     public static final String CONTROLLER = "controller";
     public static final String Z = "z";
     public static final String MAP_ASSET = "mapAsset";
+    public static final String FRICTION = "friction";
+    public static final String RESTITUTION = "restitution";
+    public static final String DENSITY = "density";
+    public static final String SENSOR = "sensor";
+    public static final String TYPE = "type";   // That's the class (Klasse) field in Tiled
+    public static final String PROP = "Prop";
+
+    // Box2D / Physics constants
+    public static final Vector2 GRAVITY = Vector2.Zero;
+    public static final Vector2 DEFAULT_PHYSIC_SCALING = new Vector2(1f,1f);
+    public static final int MAX_NUM_OF_VERTICES = 8; // must be in between 3 and 8
 }

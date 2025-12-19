@@ -3,6 +3,8 @@ package com.game.tiled;
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTile;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.objects.TiledMapTileMapObject;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.game.assets.AssetManager;
@@ -15,6 +17,7 @@ public class TiledManager {
     private final AssetManager assetManager;
     private Consumer<TiledMap> mapChangeConsumer;
     private Consumer<TiledMapTileMapObject> loadObjectConsumer;
+    private LoadTileConsumer loadTileConsumer;
     private TiledMap currentMap;
 
     public TiledManager(AssetManager assetManager) {
@@ -22,6 +25,7 @@ public class TiledManager {
         this.mapChangeConsumer = null;
         this.loadObjectConsumer = null;
         this.currentMap = null;
+        this.loadTileConsumer = null;
     }
 
 
@@ -46,6 +50,21 @@ public class TiledManager {
         for (MapLayer layer : tiledMap.getLayers()) {
             if (Constants.OBJECT_LAYER.equals(layer.getName())) {
                 loadObjectLayer(layer);
+            } else if (layer instanceof TiledMapTileLayer tileLayer) {
+                loadTileLayer(tileLayer);
+            }
+        }
+    }
+
+    private void loadTileLayer(TiledMapTileLayer tileLayer) {
+        if (loadObjectConsumer == null) return;
+
+        for (int y = 0; y < tileLayer.getHeight(); y++) {
+            for (int x = 0; x < tileLayer.getWidth(); x++) {
+                TiledMapTileLayer.Cell cell = tileLayer.getCell(x, y);
+                if (cell == null) continue;
+
+                loadTileConsumer.accept(cell.getTile(), x, y);
             }
         }
     }
@@ -68,5 +87,16 @@ public class TiledManager {
 
     public void setLoadObjectConsumer(Consumer<TiledMapTileMapObject> loadObjectConsumer) {
         this.loadObjectConsumer = loadObjectConsumer;
+    }
+
+    public void setLoadTileConsumer(LoadTileConsumer loadTileConsumer) {
+        this.loadTileConsumer = loadTileConsumer;
+    }
+
+    @FunctionalInterface
+    public interface LoadTileConsumer {
+        void accept(TiledMapTile tile, float x, float y);
+
+
     }
 }
