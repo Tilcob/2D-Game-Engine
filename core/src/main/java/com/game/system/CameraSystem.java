@@ -16,7 +16,7 @@ public class CameraSystem extends IteratingSystem {
     private final Vector2 targetPosition;
     private float mapWidth;
     private float mapHeight;
-    private float final float smoothingFactor;
+    private final float smoothingFactor;
 
     public CameraSystem(Camera camera) {
         super(Family.all(CameraFollow.class, Transform.class).get());
