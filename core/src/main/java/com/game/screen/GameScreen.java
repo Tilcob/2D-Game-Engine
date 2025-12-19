@@ -4,9 +4,11 @@ import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Disposable;
 import com.game.GdxGame;
 import com.game.assets.MapAsset;
+import com.game.config.Constants;
 import com.game.input.GameControllerState;
 import com.game.input.KeyboardController;
 import com.game.system.*;
@@ -21,20 +23,25 @@ public class GameScreen extends ScreenAdapter {
     private final TiledAshleyConfigurator tiledAshleyConfigurator;
     private final KeyboardController keyboardController;
     private final GdxGame game;
+    private final World physicWorld;
 
     public GameScreen(GdxGame game) {
         this.game = game;
         this.tiledManager = new TiledManager(game.getAssetManager());
         this.engine = new Engine();
-        this.tiledAshleyConfigurator = new TiledAshleyConfigurator(engine, game.getAssetManager());
+        this.physicWorld = new World(Constants.GRAVITY, true);
+        this.physicWorld.setAutoClearForces(false);
+        this.tiledAshleyConfigurator = new TiledAshleyConfigurator(engine, game.getAssetManager(), this.physicWorld);
         this.keyboardController = new KeyboardController(GameControllerState.class, engine);
 
         this.engine.addSystem(new ControllerSystem());
-        this.engine.addSystem(new MoveSystem());
+        this.engine.addSystem(new PhysicMoveSystem());
         this.engine.addSystem(new FsmSystem());
         this.engine.addSystem(new FacingSystem());
+        this.engine.addSystem(new PhysicSystem(physicWorld, Constants.FIXED_INTERVAL));
         this.engine.addSystem(new AnimationSystem(game.getAssetManager()));
         this.engine.addSystem(new RenderSystem(game.getBatch(), game.getViewport(), game.getCamera()));
+        this.engine.addSystem(new PhysicDebugRenderSystem(physicWorld, game.getCamera()));
     }
 
     @Override
@@ -45,6 +52,8 @@ public class GameScreen extends ScreenAdapter {
         Consumer<TiledMap> renderConsumer = engine.getSystem(RenderSystem.class)::setMap;
         tiledManager.setMapChangeConsumer(renderConsumer);
         tiledManager.setLoadObjectConsumer(tiledAshleyConfigurator::onLoadObject);
+        tiledManager.setLoadTileConsumer(tiledAshleyConfigurator::onLoadTile);
+
         TiledMap map = tiledManager.loadMap(MapAsset.MAIN);
         tiledManager.setMap(map);
     }
@@ -67,5 +76,6 @@ public class GameScreen extends ScreenAdapter {
                 disposable.dispose();
             }
         }
+        physicWorld.dispose();
     }
 }

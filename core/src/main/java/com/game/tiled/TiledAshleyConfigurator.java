@@ -7,21 +7,27 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.FileTextureData;
+import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.MapObjects;
 import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.objects.TiledMapTileMapObject;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.*;
 import com.game.assets.AssetManager;
 import com.game.assets.AtlasAsset;
 import com.game.component.*;
+import com.game.component.Transform;
 import com.game.config.Constants;
 
 public class TiledAshleyConfigurator {
     private final Engine engine;
     private final AssetManager assetManager;
+    private final World world;
 
-    public TiledAshleyConfigurator(Engine engine, AssetManager assetManager) {
+    public TiledAshleyConfigurator(Engine engine, AssetManager assetManager, World world) {
         this.engine = engine;
         this.assetManager = assetManager;
+        this.world = world;
     }
 
     public void onLoadObject(TiledMapTileMapObject object) {
@@ -39,10 +45,32 @@ public class TiledAshleyConfigurator {
         addEntityController(object, entity);
         addEntityMove(tile, entity);
         addEntityAnimation(tile, entity);
+        BodyDef.BodyType bodyType = getObjectBodyType(tile);
+        addEntityPhysic(tile.getObjects(), bodyType, Vector2.Zero, entity);
         entity.add(new Facing(Facing.FacingDirection.DOWN));
         entity.add(new Fsm(entity));
 
         engine.addEntity(entity);
+    }
+
+    private BodyDef.BodyType getObjectBodyType(TiledMapTile tile) {
+        String classType = tile.getProperties().get(Constants.TYPE, "", String.class);
+
+        if (Constants.PROP.equals(classType)) {
+            return BodyDef.BodyType.StaticBody;
+        }
+        return BodyDef.BodyType.DynamicBody;
+    }
+
+    private void addEntityPhysic(MapObjects mapObjects, BodyDef.BodyType bodyType, Vector2 relativeTo, Entity entity) {
+        if (mapObjects.getCount() == 0) return;
+
+        Transform transform = Transform.MAPPER.get(entity);
+        Vector2 position = transform.getPosition();
+        Vector2 scaling = transform.getScaling();
+
+        Body body = createBody(mapObjects, position, scaling, bodyType, relativeTo, entity);
+        entity.add(new Physic(body, transform.getPosition().cpy()));
     }
 
     private void addEntityAnimation(TiledMapTile tile, Entity entity) {
@@ -97,5 +125,40 @@ public class TiledAshleyConfigurator {
         if  (region != null) return region;
 
         return tile.getTextureRegion();
+    }
+
+    public void onLoadTile(TiledMapTile tile, float x, float y) {
+        createBody(
+            tile.getObjects(),
+            new Vector2(x, y),
+            Constants.DEFAULT_PHYSIC_SCALING,
+            BodyDef.BodyType.StaticBody,
+            Vector2.Zero,
+            Constants.ENVIRONMENT
+        );
+    }
+
+    private Body createBody(MapObjects mapObjects,
+                            Vector2 position,
+                            Vector2 scaling,
+                            BodyDef.BodyType bodyType,
+                            Vector2 relativeTo,
+                            Object userData) {
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = bodyType;
+        bodyDef.position.set(position);
+        bodyDef.fixedRotation = true;
+
+        Body body = world.createBody(bodyDef);
+        body.setUserData(userData);
+        for (MapObject object : mapObjects) {
+            FixtureDef fixtureDef = TiledPhysics.fixtureDefOf(object, scaling, relativeTo);
+            if (fixtureDef == null) continue;
+            Fixture fixture = body.createFixture(fixtureDef);
+            fixture.setUserData(object.getName());
+            fixtureDef.shape.dispose();
+
+        }
+        return body;
     }
 }
