@@ -44,7 +44,7 @@ public class TiledPhysics {
 
         for (int i = 0; i < polyVertices.length; i+=2) {
             vertices[i] = offsetX + polyVertices[i] * Constants.UNIT_SCALE * scaling.x;
-            vertices[i + 1] = offsetY * polyVertices[i + 1] * Constants.UNIT_SCALE * scaling.y;
+            vertices[i + 1] = offsetY + polyVertices[i + 1] * Constants.UNIT_SCALE * scaling.y;
         }
 
         ChainShape shape = new ChainShape();

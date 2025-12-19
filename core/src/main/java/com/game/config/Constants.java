@@ -10,6 +10,7 @@ public class Constants {
     // 16 units wide and 9 units high. 1 unit ~ 1 Tile (32px * 32px || 16px * 16px || ...)
     public static final float WIDTH = 16f;
     public static final float HEIGHT = 9f;
+    public static final int WINDOW_FACTOR = 100;
 
     public static final float UNIT_SCALE = 1f / 16f;
 
@@ -43,6 +44,15 @@ public class Constants {
     public static final String SENSOR = "sensor";
     public static final String TYPE = "type";   // That's the class (Klasse) field in Tiled
     public static final String PROP = "Prop";
+    public static final String CAMERA_FOLLOW = "cameraFollow";
+
+
+    // Map Properties
+    public static final String MAP_WIDTH = "width";
+    public static final String MAP_HEIGHT = "height";
+    public static final String TILE_WIDTH = "tilewidth";
+    public static final String TILE_HEIGHT = "tileheight";
+
 
     // Box2D / Physics constants
     public static final Vector2 GRAVITY = Vector2.Zero;
