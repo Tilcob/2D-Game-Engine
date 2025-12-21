@@ -27,10 +27,10 @@ public class GameScreen extends ScreenAdapter {
 
     public GameScreen(GdxGame game) {
         this.game = game;
-        this.tiledManager = new TiledManager(game.getAssetManager());
         this.engine = new Engine();
         this.physicWorld = new World(Constants.GRAVITY, true);
         this.physicWorld.setAutoClearForces(false);
+        this.tiledManager = new TiledManager(game.getAssetManager(), physicWorld);
         this.tiledAshleyConfigurator = new TiledAshleyConfigurator(engine, game.getAssetManager(), this.physicWorld);
         this.keyboardController = new KeyboardController(GameControllerState.class, engine);
 

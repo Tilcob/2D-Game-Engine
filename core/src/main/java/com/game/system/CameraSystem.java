@@ -57,11 +57,11 @@ public class CameraSystem extends IteratingSystem {
         this.targetPosition.set(targetX, targetY);
     }
 
-    public void setMap(TiledMap map) {
-        int width = map.getProperties().get(Constants.MAP_WIDTH, 0, Integer.class);
-        int height = map.getProperties().get(Constants.MAP_HEIGHT, 0, Integer.class);
-        int tileWidth = map.getProperties().get(Constants.TILE_WIDTH, 0, Integer.class);
-        int tileHeight = map.getProperties().get(Constants.TILE_HEIGHT, 0, Integer.class);
+    public void setMap(TiledMap tiledMap) {
+        int width = tiledMap.getProperties().get(Constants.MAP_WIDTH, 0, Integer.class);
+        int height = tiledMap.getProperties().get(Constants.MAP_HEIGHT, 0, Integer.class);
+        int tileWidth = tiledMap.getProperties().get(Constants.TILE_WIDTH, 0, Integer.class);
+        int tileHeight = tiledMap.getProperties().get(Constants.TILE_HEIGHT, 0, Integer.class);
 
         this.mapWidth = width * tileWidth * Constants.UNIT_SCALE;
         this.mapHeight = height * tileHeight * Constants.UNIT_SCALE;
