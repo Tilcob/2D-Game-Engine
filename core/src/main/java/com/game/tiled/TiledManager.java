@@ -9,6 +9,7 @@ import com.badlogic.gdx.maps.tiled.objects.TiledMapTileMapObject;
 import com.badlogic.gdx.math.Polyline;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.game.assets.AssetManager;
 import com.game.assets.MapAsset;
@@ -43,6 +44,14 @@ public class TiledManager {
     public void setMap(TiledMap map) {
         if (currentMap != null) {
             assetManager.unload(currentMap.getProperties().get(Constants.MAP_ASSET, MapAsset.class));
+
+            Array<Body> bodies = new Array<>();
+            world.getBodies(bodies);
+            for (Body body : bodies) {
+                if (Constants.ENVIRONMENT.equals(body.getUserData())) {
+                    world.destroyBody(body);
+                }
+            }
         }
         currentMap = map;
         loadMapObjects(map);
@@ -81,7 +90,7 @@ public class TiledManager {
         bodyDef.position.setZero();
         bodyDef.fixedRotation = true;
         Body body = world.createBody(bodyDef);
-
+        body.setUserData(Constants.ENVIRONMENT);
 
         // left edge
         createBoundary(boxThickness, halfMapHeight, -boxThickness, halfMapHeight, body);

@@ -5,6 +5,7 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.game.GdxGame;
 import com.game.assets.AssetManager;
 import com.game.assets.AtlasAsset;
+import com.game.assets.SoundAsset;
 
 public class LoadingScreen extends ScreenAdapter {
     private final GdxGame game;
@@ -19,6 +20,9 @@ public class LoadingScreen extends ScreenAdapter {
     public void show() {
         for (AtlasAsset asset: AtlasAsset.values()) {
             assetManager.queue(asset);
+        }
+        for (SoundAsset soundAsset : SoundAsset.values()) {
+            assetManager.queue(soundAsset);
         }
     }
 
