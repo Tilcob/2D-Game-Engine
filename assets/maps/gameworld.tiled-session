@@ -49,7 +49,7 @@
         "objects.tsx"
     ],
     "project": "gameworld.tiled-project",
-    "property.type": "bool",
+    "property.type": "string",
     "recentFiles": [
         "objects.tsx",
         "terrain.tsx",

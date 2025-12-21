@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.game.assets.AssetManager;
+import com.game.audio.AudioManager;
 import com.game.config.Constants;
 import com.game.screen.LoadingScreen;
 import org.jetbrains.annotations.NotNull;
@@ -25,6 +26,7 @@ public class GdxGame extends Game {
     private OrthographicCamera camera;
     private Viewport viewport;
     private AssetManager assetManager;
+    private AudioManager audioManager;
     private GLProfiler glProfiler;
     private FPSLogger fpsLogger;
     private InputMultiplexer inputMultiplexer;
@@ -40,6 +42,7 @@ public class GdxGame extends Game {
         camera = new OrthographicCamera();
         viewport = new FitViewport(Constants.WIDTH, Constants.HEIGHT, camera);
         assetManager = new AssetManager(new InternalFileHandleResolver());
+        audioManager = new AudioManager(assetManager);
         glProfiler = new GLProfiler(Gdx.graphics);
         fpsLogger = new FPSLogger();
 
@@ -105,6 +108,10 @@ public class GdxGame extends Game {
 
     public AssetManager getAssetManager() {
         return assetManager;
+    }
+
+    public AudioManager getAudioManager() {
+        return audioManager;
     }
 
     public void setInputProcessors(InputProcessor... processors) {

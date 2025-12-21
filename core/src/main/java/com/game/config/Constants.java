@@ -52,6 +52,7 @@ public class Constants {
     public static final String MAP_HEIGHT = "height";
     public static final String TILE_WIDTH = "tilewidth";
     public static final String TILE_HEIGHT = "tileheight";
+    public static final String MUSIC = "music";
 
 
     // Box2D / Physics constants

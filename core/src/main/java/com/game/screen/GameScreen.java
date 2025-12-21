@@ -8,6 +8,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Disposable;
 import com.game.GdxGame;
 import com.game.assets.MapAsset;
+import com.game.audio.AudioManager;
 import com.game.config.Constants;
 import com.game.input.GameControllerState;
 import com.game.input.KeyboardController;
@@ -24,6 +25,7 @@ public class GameScreen extends ScreenAdapter {
     private final KeyboardController keyboardController;
     private final GdxGame game;
     private final World physicWorld;
+    private final AudioManager audioManager;
 
     public GameScreen(GdxGame game) {
         this.game = game;
@@ -33,8 +35,9 @@ public class GameScreen extends ScreenAdapter {
         this.tiledManager = new TiledManager(game.getAssetManager(), physicWorld);
         this.tiledAshleyConfigurator = new TiledAshleyConfigurator(engine, game.getAssetManager(), this.physicWorld);
         this.keyboardController = new KeyboardController(GameControllerState.class, engine);
+        this.audioManager = game.getAudioManager();
 
-        this.engine.addSystem(new ControllerSystem());
+        this.engine.addSystem(new ControllerSystem(audioManager));
         this.engine.addSystem(new PhysicMoveSystem());
         this.engine.addSystem(new FsmSystem());
         this.engine.addSystem(new FacingSystem());
@@ -52,7 +55,9 @@ public class GameScreen extends ScreenAdapter {
 
         Consumer<TiledMap> renderConsumer = engine.getSystem(RenderSystem.class)::setMap;
         Consumer<TiledMap> cameraConsumer = engine.getSystem(CameraSystem.class)::setMap;
-        tiledManager.setMapChangeConsumer(renderConsumer.andThen(cameraConsumer));
+        Consumer<TiledMap> audioConsumer = audioManager::setMap;
+
+        tiledManager.setMapChangeConsumer(renderConsumer.andThen(cameraConsumer).andThen(audioConsumer));
         tiledManager.setLoadObjectConsumer(tiledAshleyConfigurator::onLoadObject);
         tiledManager.setLoadTileConsumer(tiledAshleyConfigurator::onLoadTile);
 
