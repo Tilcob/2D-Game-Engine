@@ -21,11 +21,14 @@ public class DamageSystem extends IteratingSystem {
         Damaged damaged = Damaged.MAPPER.get(entity);
         entity.remove(Damaged.class);
 
+        System.out.println("DamageSystem: processing entity " + entity);
+
         Life life = Life.MAPPER.get(entity);
         if (life != null) life.aadLife(-damaged.getDamage());
 
         Transform transform = Transform.MAPPER.get(entity);
         if (transform != null) {
+            System.out.println("DamageSystem: processing entity in Transform if: " + entity);
             // we should check that the damage source is the player, but
             // in this tutorial game it is in the only possibility so we can skip it
 

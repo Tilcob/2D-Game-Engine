@@ -2,7 +2,6 @@ package com.game.tiled;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -51,11 +50,18 @@ public class TiledAshleyConfigurator {
         addEntityPhysic(tile.getObjects(), bodyType, Vector2.Zero, entity);
         addEntityCameraFollow(object, entity);
         addEntityLife(tile, entity);
+        addEntityPlayer(object, entity);
         addEntityAttack(tile, entity);
         entity.add(new Facing(Facing.FacingDirection.DOWN));
         entity.add(new Fsm(entity));
 
         engine.addEntity(entity);
+    }
+
+    private void addEntityPlayer(TiledMapTileMapObject object, Entity entity) {
+        if (Constants.PLAYER_NAME.equals(object.getName())) {
+            entity.add(new Player());
+        }
     }
 
     private void addEntityLife(TiledMapTile tile, Entity entity) {

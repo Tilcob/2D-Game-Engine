@@ -35,7 +35,7 @@
    <property name="attackSound" value="SWING"/>
    <property name="damage" type="float" value="7"/>
    <property name="damageDelay" type="float" value="0.2"/>
-   <property name="life" type="float" value="12"/>
+   <property name="life" type="int" value="12"/>
    <property name="lifeRegeneration" type="float" value="0.25"/>
    <property name="speed" type="float" value="4"/>
   </properties>

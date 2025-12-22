@@ -3,15 +3,19 @@ package com.game.system;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.game.GdxGame;
 import com.game.component.Attack;
 import com.game.component.Controller;
 import com.game.component.Move;
 import com.game.input.Command;
+import com.game.screen.MenuScreen;
 
 public class ControllerSystem extends IteratingSystem {
+    private final GdxGame game;
 
-    public ControllerSystem() {
+    public ControllerSystem(GdxGame game) {
         super(Family.all(Controller.class).get());
+        this.game = game;
     }
 
     @Override
@@ -25,7 +29,8 @@ public class ControllerSystem extends IteratingSystem {
                 case DOWN -> moveEntity(entity, 0f, -1f);
                 case LEFT -> moveEntity(entity, -1f, 0f);
                 case RIGHT -> moveEntity(entity, 1f, 0f);
-
+                case SELECT -> startEntityAttack(entity);
+                case CANCEL -> game.setScreen(MenuScreen.class);
             }
         }
         controller.getPressedCommands().clear();
@@ -36,7 +41,6 @@ public class ControllerSystem extends IteratingSystem {
                 case DOWN -> moveEntity(entity, 0f, 1f);
                 case LEFT -> moveEntity(entity, 1f, 0f);
                 case RIGHT -> moveEntity(entity, -1f, 0f);
-                case SELECT -> startEntityAttack(entity);
             }
         }
         controller.getReleasedCommands().clear();
