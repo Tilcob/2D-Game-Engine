@@ -2,13 +2,11 @@ package com.game.assets;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.loaders.FileHandleResolver;
-import com.badlogic.gdx.assets.loaders.TextureAtlasLoader;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Disposable;
-import com.ray3k.stripe.FreeTypeSkinLoader;
+import com.github.tommyettinger.freetypist.FreeTypistSkinLoader;
 
 public class AssetManager implements Disposable {
     private final com.badlogic.gdx.assets.AssetManager assetManager;
@@ -16,7 +14,7 @@ public class AssetManager implements Disposable {
     public AssetManager(FileHandleResolver resolver) {
         this.assetManager = new com.badlogic.gdx.assets.AssetManager(resolver);
         this.assetManager.setLoader(TiledMap.class, new TmxMapLoader());
-        this.assetManager.setLoader(Skin.class, new FreeTypeSkinLoader(resolver));
+        this.assetManager.setLoader(Skin.class, new FreeTypistSkinLoader(resolver));
     }
 
     public <T> T load(Asset<T> asset) {

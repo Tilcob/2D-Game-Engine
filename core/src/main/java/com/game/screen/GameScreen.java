@@ -7,11 +7,13 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.game.GdxGame;
 import com.game.assets.MapAsset;
+import com.game.assets.SkinAsset;
 import com.game.audio.AudioManager;
 import com.game.config.Constants;
 import com.game.input.GameControllerState;
@@ -19,6 +21,8 @@ import com.game.input.KeyboardController;
 import com.game.system.*;
 import com.game.tiled.TiledAshleyConfigurator;
 import com.game.tiled.TiledManager;
+import com.game.ui.model.GameViewModel;
+import com.game.ui.view.GameView;
 
 import java.util.function.Consumer;
 
@@ -32,6 +36,8 @@ public class GameScreen extends ScreenAdapter {
     private final AudioManager audioManager;
     private final Stage stage;
     private final Viewport uiViewport;
+    private final GameViewModel viewModel;
+    private final Skin skin;
 
     public GameScreen(GdxGame game) {
         this.game = game;
@@ -44,17 +50,26 @@ public class GameScreen extends ScreenAdapter {
         this.audioManager = game.getAudioManager();
         this.uiViewport = new FitViewport(320f, 180f);
         this.stage = new Stage(uiViewport, game.getBatch());
+        this.viewModel = new GameViewModel(game);
+        this.skin = game.getAssetManager().get(SkinAsset.DEFAULT);
 
-        this.engine.addSystem(new ControllerSystem());
+        this.engine.addSystem(new ControllerSystem(game));
         this.engine.addSystem(new PhysicMoveSystem());
         this.engine.addSystem(new FsmSystem());
         this.engine.addSystem(new FacingSystem());
         this.engine.addSystem(new PhysicSystem(physicWorld, Constants.FIXED_INTERVAL));
-        this.engine.addSystem(new AttackSystem(physicWorld, audioManager));
+        this.engine.addSystem(new AttackSystem(physicWorld, audioManager, viewModel));
+        this.engine.addSystem(new DamageSystem(viewModel));
+        this.engine.addSystem(new LifeSystem(viewModel));
         this.engine.addSystem(new AnimationSystem(game.getAssetManager()));
         this.engine.addSystem(new CameraSystem(game.getCamera()));
         this.engine.addSystem(new RenderSystem(game.getBatch(), game.getViewport(), game.getCamera()));
         this.engine.addSystem(new PhysicDebugRenderSystem(physicWorld, game.getCamera()));
+
+        // DamagedSystem must run after FsmSystem to correctly
+        // detect when a damaged animation should be played.
+        // This is done by checking if an entity has a Damaged component,
+        // and this component is removed in the DamagedSystem.
     }
 
     @Override
@@ -67,6 +82,8 @@ public class GameScreen extends ScreenAdapter {
     public void show() {
         game.setInputProcessors(stage, keyboardController);
         keyboardController.setActiveState(GameControllerState.class);
+
+        stage.addActor(new GameView(skin, stage, viewModel));
 
         Consumer<TiledMap> renderConsumer = engine.getSystem(RenderSystem.class)::setMap;
         Consumer<TiledMap> cameraConsumer = engine.getSystem(CameraSystem.class)::setMap;

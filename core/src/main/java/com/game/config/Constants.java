@@ -51,6 +51,7 @@ public class Constants {
     public static final String DAMAGE = "damage";
     public static final String DAMAGE_DELAY = "damageDelay";
     public static final String ATTACK_SENSOR = "attack_sensor_";
+    public static final String PLAYER_NAME = "Player";
 
 
     // Map Properties

@@ -2,6 +2,7 @@ package com.game.ui.model;
 
 import com.badlogic.gdx.math.Vector2;
 import com.game.GdxGame;
+import com.game.assets.SoundAsset;
 import com.game.audio.AudioManager;
 import com.game.config.Constants;
 
@@ -27,5 +28,43 @@ public class GameViewModel extends ViewModel {
         Vector2 position = new Vector2(x, y);
         this.playerDamage = Map.entry(position, amount);
         this.propertyChangeSupport.firePropertyChange(Constants.PLAYER_DAMAGE, null, this.playerDamage);
+    }
+
+    public Vector2 toScreenCoords(Vector2 position) {
+        tmpVec2.set(position);
+        game.getViewport().project(tmpVec2);
+        return tmpVec2;
+    }
+
+    public void updateLifeInfo(float maxLife, float life) {
+        setMaxLife((int) maxLife);
+        setLifePoints((int) life);
+    }
+
+
+
+    public int getLifePoints() {
+        return lifePoints;
+    }
+
+    public void setLifePoints(int lifePoints) {
+        if (this.lifePoints != lifePoints) {
+            this.propertyChangeSupport.firePropertyChange(Constants.LIFE_POINTS, this.lifePoints, lifePoints);
+            if (this.lifePoints != 0 && this.lifePoints < lifePoints) {
+                audioManager.playSound(SoundAsset.LIFE_REG);
+            }
+        }
+        this.lifePoints = lifePoints;
+    }
+
+    public int getMaxLife() {
+        return maxLife;
+    }
+
+    public void setMaxLife(int maxLife) {
+        if (this.maxLife != maxLife) {
+            this.propertyChangeSupport.firePropertyChange(Constants.MAX_LIFE, this.maxLife, maxLife);
+        }
+        this.maxLife = maxLife;
     }
 }

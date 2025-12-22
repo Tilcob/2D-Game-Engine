@@ -11,6 +11,8 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.game.audio.AudioManager;
 import com.game.component.*;
 import com.game.config.Constants;
+import com.game.ui.model.GameViewModel;
+import com.game.ui.model.ViewModel;
 
 public class AttackSystem extends IteratingSystem {
     private static final Rectangle attackAABB = new Rectangle();
@@ -19,14 +21,16 @@ public class AttackSystem extends IteratingSystem {
     private final Vector2 tmpVertex;
     private Body attackerBody;
     private float attackDamage;
+    private final GameViewModel viewModel;
 
-    public AttackSystem(World world, AudioManager audioManager) {
+    public AttackSystem(World world, AudioManager audioManager, GameViewModel viewModel) {
         super(Family.all(Attack.class, Facing.class, Physic.class).get());
         this.world = world;
         this.audioManager = audioManager;
         this.tmpVertex = new Vector2();
         this.attackerBody = null;
         this.attackDamage = 0;
+        this.viewModel = viewModel;
     }
 
     @Override
@@ -75,6 +79,8 @@ public class AttackSystem extends IteratingSystem {
 
         if (body.equals(attackerBody)) return true;
         if (!(body.getUserData() instanceof Entity entity)) return true;
+
+        //viewModel.playerDamage(10, body.getPosition().x, body.getPosition().y);
 
         Life life = Life.MAPPER.get(entity);
         if (life == null) {
