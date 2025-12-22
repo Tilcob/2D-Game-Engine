@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.game.GdxGame;
+import com.game.assets.MusicAsset;
 import com.game.assets.SkinAsset;
 import com.game.ui.model.MenuViewModel;
 import com.game.ui.view.MenuView;
@@ -35,6 +36,7 @@ public class MenuScreen extends ScreenAdapter {
         game.setInputProcessors(stage);
 
         stage.addActor(new MenuView(skin, stage, new MenuViewModel(game)));
+        game.getAudioManager().playMusic(MusicAsset.TOWN);
     }
 
     @Override
