@@ -1,16 +1,14 @@
 package com.game.ui.view;
 
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.game.input.UiEvent;
 import com.game.ui.model.ViewModel;
 
-public abstract class View<T extends ViewModel> extends Table {
+public abstract class View<T extends ViewModel> extends Table implements EventListener {
     protected final Stage stage;
     protected final Skin skin;
     protected final T viewModel;
@@ -20,6 +18,7 @@ public abstract class View<T extends ViewModel> extends Table {
         this.skin = skin;
         this.stage = stage;
         this.viewModel = viewModel;
+        this.stage.addListener(this);
         setupUI();
     }
 
@@ -36,6 +35,25 @@ public abstract class View<T extends ViewModel> extends Table {
     protected abstract void setupUI();
 
     protected void setupPropertyChanges() {
+    }
+
+    public void onLeft() {
+
+    }
+
+    public void onRight() {
+
+    }
+
+    public  void onUp() {
+
+    }
+
+    public void onDown() {
+
+    }
+
+    public void onSelect() {
 
     }
 
@@ -65,6 +83,22 @@ public abstract class View<T extends ViewModel> extends Table {
                 consumer.onEvent(actor);
             }
         });
+    }
+
+    @Override
+    public boolean handle(Event event) {
+        if (event instanceof UiEvent uiEvent) {
+            switch (uiEvent.getCommand()) {
+                case LEFT ->  onLeft();
+                case RIGHT ->  onRight();
+                case UP -> onUp();
+                case DOWN -> onDown();
+                case SELECT -> onSelect();
+            }
+            return true;
+        }
+
+        return false;
     }
 
     @FunctionalInterface

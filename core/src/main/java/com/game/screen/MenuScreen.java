@@ -10,6 +10,8 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.game.GdxGame;
 import com.game.assets.MusicAsset;
 import com.game.assets.SkinAsset;
+import com.game.input.KeyboardController;
+import com.game.input.UiControllerState;
 import com.game.ui.model.MenuViewModel;
 import com.game.ui.view.MenuView;
 
@@ -18,12 +20,14 @@ public class MenuScreen extends ScreenAdapter {
     private final Stage stage;
     private final Skin skin;
     private final Viewport uiViewport;
+    private final KeyboardController  keyboardController;
 
     public MenuScreen(GdxGame game) {
         this.game = game;
         this.uiViewport = new FitViewport(800f, 450f);
         this.stage = new Stage(uiViewport, game.getBatch());
         this.skin = game.getAssetManager().get(SkinAsset.DEFAULT);
+        this.keyboardController = new KeyboardController(UiControllerState.class, null, stage);
     }
 
     @Override
@@ -33,7 +37,7 @@ public class MenuScreen extends ScreenAdapter {
 
     @Override
     public void show() {
-        game.setInputProcessors(stage);
+        game.setInputProcessors(stage, keyboardController);
 
         stage.addActor(new MenuView(skin, stage, new MenuViewModel(game)));
         game.getAudioManager().playMusic(MusicAsset.TOWN);
