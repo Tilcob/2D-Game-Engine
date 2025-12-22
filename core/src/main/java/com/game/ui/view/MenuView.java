@@ -1,6 +1,5 @@
 package com.game.ui.view;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -8,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.game.ui.model.MenuViewModel;
 
 public class MenuView extends View<MenuViewModel> {
@@ -109,6 +109,69 @@ public class MenuView extends View<MenuViewModel> {
 
         onEnter(table, this::selectMenuItem);
         return slider;
+    }
+
+    /**
+     * Moves selection to the next menu item.
+     */
+    @Override
+    public void onDown() {
+        Group menuContentTable = this.selectedItem.getParent();
+        int currentIdx = menuContentTable.getChildren().indexOf(this.selectedItem, true);
+        if (currentIdx == -1) {
+            throw new GdxRuntimeException("'selectedItem' is not a child of 'menuContentTable'");
+        }
+
+        int numOptions = menuContentTable.getChildren().size;
+        currentIdx = (currentIdx + 1) % numOptions;
+        selectMenuItem((Group) menuContentTable.getChild(currentIdx));
+    }
+
+    /**
+     * Moves selection to the previous menu item.
+     */
+    @Override
+    public void onUp() {
+        Group menuContentTable = this.selectedItem.getParent();
+        int currentIdx = menuContentTable.getChildren().indexOf(this.selectedItem, true);
+        if (currentIdx == -1) {
+            throw new GdxRuntimeException("'selectedItem' is not a child of 'menuContentTable'");
+        }
+
+        int numOptions = menuContentTable.getChildren().size;
+        currentIdx = currentIdx == 0 ? numOptions - 1 : currentIdx - 1;
+        selectMenuItem((Group) menuContentTable.getChild(currentIdx));
+    }
+
+    @Override
+    public void onRight() {
+        MenuOption menuOption = MenuOption.valueOf(this.selectedItem.getName());
+        switch (menuOption) {
+            case MUSIC_VOLUME, SOUND_VOLUME -> {
+                Slider slider = (Slider) this.selectedItem.getChild(1);
+                slider.setValue(slider.getValue() + slider.getStepSize());
+            }
+        }
+    }
+
+    @Override
+    public void onLeft() {
+        MenuOption menuOption = MenuOption.valueOf(this.selectedItem.getName());
+        switch (menuOption) {
+            case MUSIC_VOLUME, SOUND_VOLUME -> {
+                Slider slider = (Slider) this.selectedItem.getChild(1);
+                slider.setValue(slider.getValue() - slider.getStepSize());
+            }
+        }
+    }
+
+    @Override
+    public void onSelect() {
+        MenuOption menuOption = MenuOption.valueOf(this.selectedItem.getName());
+        switch (menuOption) {
+            case START_GAME -> viewModel.startGame();
+            case QUIT_GAME -> viewModel.quitGame();
+        }
     }
 
     private enum MenuOption {

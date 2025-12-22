@@ -3,6 +3,7 @@ package com.game.input;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 
 import java.util.HashMap;
@@ -22,13 +23,15 @@ public class KeyboardController extends InputAdapter {
     private final Map<Class<? extends ControllerState>, ControllerState> stateCache;
     private ControllerState activeState;
 
-    public KeyboardController(Class<? extends ControllerState> initialState, Engine engine) {
+    public KeyboardController(Class<? extends ControllerState> initialState, Engine engine, Stage stage) {
         this.stateCache = new HashMap<>();
         this.activeState = null;
         this.commandState = new boolean[Command.values().length];
 
         this.stateCache.put(IdleControllerState.class, new IdleControllerState());
-        this.stateCache.put(GameControllerState.class, new GameControllerState(engine));
+        if (engine != null) this.stateCache.put(GameControllerState.class, new GameControllerState(engine));
+        if (stage != null) this.stateCache.put(UiControllerState.class, new UiControllerState(stage));
+
         setActiveState(initialState);
     }
 
