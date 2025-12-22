@@ -2,6 +2,7 @@ package com.game.tiled;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -15,6 +16,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.game.assets.AssetManager;
 import com.game.assets.AtlasAsset;
+import com.game.assets.SoundAsset;
 import com.game.component.*;
 import com.game.component.Transform;
 import com.game.config.Constants;
@@ -48,10 +50,25 @@ public class TiledAshleyConfigurator {
         BodyDef.BodyType bodyType = getObjectBodyType(tile);
         addEntityPhysic(tile.getObjects(), bodyType, Vector2.Zero, entity);
         addEntityCameraFollow(object, entity);
+        addEntityAttack(tile, entity);
         entity.add(new Facing(Facing.FacingDirection.DOWN));
         entity.add(new Fsm(entity));
 
         engine.addEntity(entity);
+    }
+
+    private void addEntityAttack(TiledMapTile tile, Entity entity) {
+        float damage = tile.getProperties().get(Constants.DAMAGE, 0f, Float.class);
+        if (damage == 0) return;
+
+        float damageDelay = tile.getProperties().get(Constants.DAMAGE_DELAY, 0f, Float.class);
+        String soundAssetStr = tile.getProperties().get(Constants.ATTACK_SOUND, "", String.class);
+        SoundAsset soundAsset = null;
+        if (!soundAssetStr.isBlank()) {
+            soundAsset = SoundAsset.valueOf(soundAssetStr);
+        }
+
+        entity.add(new Attack(damage, damageDelay, soundAsset));
     }
 
     private void addEntityCameraFollow(TiledMapTileMapObject object, Entity entity) {

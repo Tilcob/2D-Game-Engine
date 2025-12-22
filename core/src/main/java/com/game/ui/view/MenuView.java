@@ -125,6 +125,8 @@ public class MenuView extends View<MenuViewModel> {
         int numOptions = menuContentTable.getChildren().size;
         currentIdx = (currentIdx + 1) % numOptions;
         selectMenuItem((Group) menuContentTable.getChild(currentIdx));
+
+        // stage.setDebugAll(true); to see debug infos
     }
 
     /**

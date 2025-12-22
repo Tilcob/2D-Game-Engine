@@ -4,7 +4,7 @@ import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.audio.Sound;
 
 public enum SoundAsset implements Asset<Sound> {
-    SWORD_HIT("sword_hit.wav");
+    SWING("sword_hit.wav");
 
     private final AssetDescriptor<Sound> descriptor;
     SoundAsset(String fileName) {
