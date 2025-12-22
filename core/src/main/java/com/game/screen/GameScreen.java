@@ -45,11 +45,12 @@ public class GameScreen extends ScreenAdapter {
         this.uiViewport = new FitViewport(320f, 180f);
         this.stage = new Stage(uiViewport, game.getBatch());
 
-        this.engine.addSystem(new ControllerSystem(audioManager));
+        this.engine.addSystem(new ControllerSystem());
         this.engine.addSystem(new PhysicMoveSystem());
         this.engine.addSystem(new FsmSystem());
         this.engine.addSystem(new FacingSystem());
         this.engine.addSystem(new PhysicSystem(physicWorld, Constants.FIXED_INTERVAL));
+        this.engine.addSystem(new AttackSystem(physicWorld, audioManager));
         this.engine.addSystem(new AnimationSystem(game.getAssetManager()));
         this.engine.addSystem(new CameraSystem(game.getCamera()));
         this.engine.addSystem(new RenderSystem(game.getBatch(), game.getViewport(), game.getCamera()));

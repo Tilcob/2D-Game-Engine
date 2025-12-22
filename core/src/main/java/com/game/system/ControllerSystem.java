@@ -3,19 +3,15 @@ package com.game.system;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.game.assets.SoundAsset;
-import com.game.audio.AudioManager;
+import com.game.component.Attack;
 import com.game.component.Controller;
 import com.game.component.Move;
 import com.game.input.Command;
 
 public class ControllerSystem extends IteratingSystem {
-    private final AudioManager audioManager;
 
-    public ControllerSystem(AudioManager audioManager) {
+    public ControllerSystem() {
         super(Family.all(Controller.class).get());
-
-        this.audioManager = audioManager;
     }
 
     @Override
@@ -47,7 +43,10 @@ public class ControllerSystem extends IteratingSystem {
     }
 
     private void startEntityAttack(Entity entity) {
-        audioManager.playSound(SoundAsset.SWORD_HIT);
+        Attack attack = Attack.MAPPER.get(entity);
+        if (attack != null && attack.canAttack()) {
+            attack.startAttack();
+        }
     }
 
     private void moveEntity(Entity entity, float directionX, float directionY) {

@@ -45,6 +45,12 @@ public class Constants {
     public static final String TYPE = "type";   // That's the class (Klasse) field in Tiled
     public static final String PROP = "Prop";
     public static final String CAMERA_FOLLOW = "cameraFollow";
+    public static final String LIFE = "life";
+    public static final String LIFE_REGENERATION = "lifeRegeneration";
+    public static final String ATTACK_SOUND = "attackSound";
+    public static final String DAMAGE = "damage";
+    public static final String DAMAGE_DELAY = "damageDelay";
+    public static final String ATTACK_SENSOR = "attack_sensor_";
 
 
     // Map Properties

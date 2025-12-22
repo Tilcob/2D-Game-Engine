@@ -38,7 +38,7 @@
         }
     },
     "frame.defaultDuration": 200,
-    "last.imagePath": "C:/01_Programmieren/Java/GDX/2D-Game-Engine/assets/maps/objects",
+    "last.imagePath": "C:/01_Programmieren/Java/GDX/2D-Game-Engine/assets_raw/objects/player",
     "map.lastUsedFormat": "tmx",
     "map.layerDataFormat": "3",
     "map.tileHeight": 16,
@@ -49,7 +49,7 @@
         "objects.tsx"
     ],
     "project": "gameworld.tiled-project",
-    "property.type": "string",
+    "property.type": "float",
     "recentFiles": [
         "objects.tsx",
         "terrain.tsx",

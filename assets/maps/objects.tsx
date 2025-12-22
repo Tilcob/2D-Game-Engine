@@ -32,11 +32,39 @@
    <property name="animation" value="IDLE"/>
    <property name="animationSpeed" type="float" value="1"/>
    <property name="atlasAsset" value="OBJECTS"/>
+   <property name="attackSound" value="SWING"/>
+   <property name="damage" type="float" value="7"/>
+   <property name="damageDelay" type="float" value="0.2"/>
+   <property name="life" type="float" value="12"/>
+   <property name="lifeRegeneration" type="float" value="0.25"/>
    <property name="speed" type="float" value="4"/>
   </properties>
   <image source="objects/player.png" width="32" height="32"/>
   <objectgroup draworder="index" id="5">
    <object id="6" x="9.54545" y="18" width="11.9091" height="4.90909">
+    <ellipse/>
+   </object>
+   <object id="7" name="attack_sensor_down" x="0" y="18" width="32" height="14">
+    <properties>
+     <property name="sensor" type="bool" value="true"/>
+    </properties>
+   </object>
+   <object id="9" name="attack_sensor_left" x="0" y="0" width="14" height="31.8182">
+    <properties>
+     <property name="sensor" type="bool" value="true"/>
+    </properties>
+   </object>
+   <object id="10" name="attack_sensor_right" x="18" y="0" width="14" height="31.8182">
+    <properties>
+     <property name="sensor" type="bool" value="true"/>
+    </properties>
+   </object>
+   <object id="11" name="attack_sensor_up" x="0" y="0" width="32" height="14">
+    <properties>
+     <property name="sensor" type="bool" value="true"/>
+    </properties>
+   </object>
+   <object id="12" x="8.77272" y="4.63636" width="13.5455" height="5.81818">
     <ellipse/>
    </object>
   </objectgroup>
