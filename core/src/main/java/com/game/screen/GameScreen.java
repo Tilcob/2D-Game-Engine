@@ -3,9 +3,13 @@ package com.game.screen;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Disposable;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.game.GdxGame;
 import com.game.assets.MapAsset;
 import com.game.audio.AudioManager;
@@ -26,6 +30,8 @@ public class GameScreen extends ScreenAdapter {
     private final GdxGame game;
     private final World physicWorld;
     private final AudioManager audioManager;
+    private final Stage stage;
+    private final Viewport uiViewport;
 
     public GameScreen(GdxGame game) {
         this.game = game;
@@ -36,6 +42,8 @@ public class GameScreen extends ScreenAdapter {
         this.tiledAshleyConfigurator = new TiledAshleyConfigurator(engine, game.getAssetManager(), this.physicWorld);
         this.keyboardController = new KeyboardController(GameControllerState.class, engine);
         this.audioManager = game.getAudioManager();
+        this.uiViewport = new FitViewport(320f, 180f);
+        this.stage = new Stage(uiViewport, game.getBatch());
 
         this.engine.addSystem(new ControllerSystem(audioManager));
         this.engine.addSystem(new PhysicMoveSystem());
@@ -49,8 +57,14 @@ public class GameScreen extends ScreenAdapter {
     }
 
     @Override
+    public void resize(int width, int height) {
+        super.resize(width, height);
+        uiViewport.update(width, height, true);
+    }
+
+    @Override
     public void show() {
-        game.setInputProcessors(keyboardController);
+        game.setInputProcessors(stage, keyboardController);
         keyboardController.setActiveState(GameControllerState.class);
 
         Consumer<TiledMap> renderConsumer = engine.getSystem(RenderSystem.class)::setMap;
@@ -68,12 +82,18 @@ public class GameScreen extends ScreenAdapter {
     @Override
     public void hide() {
         engine.removeAllEntities();
+        stage.clear();
     }
 
     @Override
     public void render(float delta) {
         delta = Math.min(delta, 1 / 30f);
         engine.update(delta);
+
+        uiViewport.apply();
+        stage.getBatch().setColor(Color.WHITE);
+        stage.act(delta);
+        stage.draw();
     }
 
     @Override
@@ -84,5 +104,6 @@ public class GameScreen extends ScreenAdapter {
             }
         }
         physicWorld.dispose();
+        stage.dispose();
     }
 }

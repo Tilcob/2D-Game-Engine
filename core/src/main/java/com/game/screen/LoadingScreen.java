@@ -5,6 +5,7 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.game.GdxGame;
 import com.game.assets.AssetManager;
 import com.game.assets.AtlasAsset;
+import com.game.assets.SkinAsset;
 import com.game.assets.SoundAsset;
 
 public class LoadingScreen extends ScreenAdapter {
@@ -24,6 +25,7 @@ public class LoadingScreen extends ScreenAdapter {
         for (SoundAsset soundAsset : SoundAsset.values()) {
             assetManager.queue(soundAsset);
         }
+        assetManager.queue(SkinAsset.DEFAULT);
     }
 
     @Override
@@ -33,11 +35,12 @@ public class LoadingScreen extends ScreenAdapter {
             creatScreens();
             game.removeScreen(this);
             dispose();
-            game.setScreen(GameScreen.class);
+            game.setScreen(MainMenuScreen.class);
         }
     }
 
     private void creatScreens() {
+        game.addScreen(new MainMenuScreen(game));
         game.addScreen(new GameScreen(game));
     }
 }
