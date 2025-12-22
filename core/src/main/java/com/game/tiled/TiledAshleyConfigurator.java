@@ -50,11 +50,20 @@ public class TiledAshleyConfigurator {
         BodyDef.BodyType bodyType = getObjectBodyType(tile);
         addEntityPhysic(tile.getObjects(), bodyType, Vector2.Zero, entity);
         addEntityCameraFollow(object, entity);
+        addEntityLife(tile, entity);
         addEntityAttack(tile, entity);
         entity.add(new Facing(Facing.FacingDirection.DOWN));
         entity.add(new Fsm(entity));
 
         engine.addEntity(entity);
+    }
+
+    private void addEntityLife(TiledMapTile tile, Entity entity) {
+        int life = tile.getProperties().get(Constants.LIFE, 0, Integer.class);
+        if (life == 0) return;
+
+        float lifeRegeneration = tile.getProperties().get(Constants.LIFE_REGENERATION, 0f, Float.class);
+        entity.add(new Life(life, lifeRegeneration));
     }
 
     private void addEntityAttack(TiledMapTile tile, Entity entity) {

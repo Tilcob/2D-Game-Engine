@@ -9,10 +9,7 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.game.audio.AudioManager;
-import com.game.component.Attack;
-import com.game.component.Facing;
-import com.game.component.Move;
-import com.game.component.Physic;
+import com.game.component.*;
 import com.game.config.Constants;
 
 public class AttackSystem extends IteratingSystem {
@@ -21,6 +18,7 @@ public class AttackSystem extends IteratingSystem {
     private final World world;
     private final Vector2 tmpVertex;
     private Body attackerBody;
+    private float attackDamage;
 
     public AttackSystem(World world, AudioManager audioManager) {
         super(Family.all(Attack.class, Facing.class, Physic.class).get());
@@ -28,6 +26,7 @@ public class AttackSystem extends IteratingSystem {
         this.audioManager = audioManager;
         this.tmpVertex = new Vector2();
         this.attackerBody = null;
+        this.attackDamage = 0;
     }
 
     @Override
@@ -49,10 +48,15 @@ public class AttackSystem extends IteratingSystem {
             Facing.FacingDirection facingDirection = Facing.MAPPER.get(entity).getDirection();
             attackerBody = Physic.MAPPER.get(entity).getBody();
             PolygonShape attackShape = getAttackFixture(attackerBody, facingDirection);
-
             updateAttackAABB(attackerBody.getPosition(), attackShape);
 
+            attackDamage = attack.getDamage();
             world.QueryAABB(this::attackCallback, attackAABB.x, attackAABB.y, attackAABB.width, attackAABB.height);
+
+            Move move = Move.MAPPER.get(entity);
+            if (move != null) {
+                move.setRooted(false);
+            }
         }
     }
 
@@ -70,9 +74,8 @@ public class AttackSystem extends IteratingSystem {
         Body body = fixture.getBody();
 
         if (body.equals(attackerBody)) return true;
-        if (!(body.getUserData() instanceof Entity)) return true;
+        if (!(body.getUserData() instanceof Entity entity)) return true;
 
-        /*
         Life life = Life.MAPPER.get(entity);
         if (life == null) {
             return true;
@@ -80,11 +83,10 @@ public class AttackSystem extends IteratingSystem {
 
         Damaged damaged = Damaged.MAPPER.get(entity);
         if (damaged == null) {
-            entity.add(new Damaged(this.attackDamage));
+            entity.add(new Damaged(attackDamage));
         } else {
-            damaged.addDamage(this.attackDamage);
+            damaged.addDamage(attackDamage);
         }
-         */
 
         return true;
     }
@@ -97,6 +99,7 @@ public class AttackSystem extends IteratingSystem {
                 return (PolygonShape) fixture.getShape();
             }
         }
+
         throw new GdxRuntimeException("Entity has no attack sensors of name: " + fixtureName);
     }
 }

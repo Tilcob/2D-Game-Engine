@@ -68,4 +68,9 @@ public class Constants {
 
     // Camera
     public static final float CAMERA_OFFSET_Y = 1f;
+
+    // Property Changes
+    public static final String LIFE_POINTS = "lifePoints";
+    public static final String MAX_LIFE = "maxLife";
+    public static final String PLAYER_DAMAGE = "playerDamage";
 }
