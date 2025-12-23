@@ -9,10 +9,7 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.badlogic.gdx.utils.Timer;
 import com.game.assets.SoundAsset;
 import com.game.audio.AudioManager;
-import com.game.component.Animation2D;
-import com.game.component.Life;
-import com.game.component.Tiled;
-import com.game.component.Trigger;
+import com.game.component.*;
 
 public class TriggerSystem extends IteratingSystem {
     private final AudioManager audioManager;
@@ -26,7 +23,6 @@ public class TriggerSystem extends IteratingSystem {
     protected void processEntity(Entity entity, float deltaTime) {
         Trigger trigger = Trigger.MAPPER.get(entity);
         if (trigger.getTriggeringEntity() == null) return;
-
         fireTrigger(trigger.getName(), trigger.getTriggeringEntity());
         trigger.setTriggeringEntity(null);
     }
@@ -45,7 +41,6 @@ public class TriggerSystem extends IteratingSystem {
         Animation2D animation2D = Animation2D.MAPPER.get(trapEntity);
         animation2D.setSpeed(1f);
         animation2D.setPlayMode(Animation.PlayMode.NORMAL);
-
         audioManager.playSound(SoundAsset.TRAP);
 
         Timer.schedule(new Timer.Task() {
@@ -56,16 +51,15 @@ public class TriggerSystem extends IteratingSystem {
             }
         }, 2.5f);
 
-        Life life = Life.MAPPER.get(triggeringEntity);
-        if (life.getLife() > 2) {
-            life.addLife(-2f);
-        }
+        triggeringEntity.add(new Damaged(2f));
+        System.out.println("Player hurt");
     }
 
     private Entity entityByTiledId(int id) {
-        ImmutableArray<Entity> entities = getEngine().getEntitiesFor(Family.all(Trigger.class).get());
+        ImmutableArray<Entity> entities = getEngine().getEntitiesFor(Family.all(Tiled.class).get());
         for (Entity entity : entities) {
             if (Tiled.MAPPER.get(entity).getId() == id) {
+                System.out.println("Id: " + id);
                 return entity;
             }
 

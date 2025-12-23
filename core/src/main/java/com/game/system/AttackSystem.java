@@ -3,6 +3,7 @@ package com.game.system;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
@@ -56,6 +57,13 @@ public class AttackSystem extends IteratingSystem {
 
             attackDamage = attack.getDamage();
             world.QueryAABB(this::attackCallback, attackAABB.x, attackAABB.y, attackAABB.width, attackAABB.height);
+
+            Animation2D animation2D = Animation2D.MAPPER.get(entity);
+            if (animation2D != null) {
+                animation2D.setType(Animation2D.AnimationType.ATTACK);
+                animation2D.setPlayMode(Animation.PlayMode.NORMAL);
+                animation2D.setSpeed(1f);
+            }
 
             Move move = Move.MAPPER.get(entity);
             if (move != null) {
