@@ -21,7 +21,9 @@ public class ControllerSystem extends IteratingSystem {
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
         Controller controller = Controller.MAPPER.get(entity);
-        if (controller.getPressedCommands().isEmpty() && controller.getReleasedCommands().isEmpty()) return;
+        if (controller.getPressedCommands().isEmpty() && controller.getReleasedCommands().isEmpty()) {
+            return;
+        }
 
         for (Command command : controller.getPressedCommands()) {
             switch (command) {
@@ -53,11 +55,11 @@ public class ControllerSystem extends IteratingSystem {
         }
     }
 
-    private void moveEntity(Entity entity, float directionX, float directionY) {
+    private void moveEntity(Entity entity, float dx, float dy) {
         Move move = Move.MAPPER.get(entity);
-        if (move == null) return;
-
-        move.getDirection().x += directionX;
-        move.getDirection().y += directionY;
+        if (move != null) {
+            move.getDirection().x += dx;
+            move.getDirection().y += dy;
+        }
     }
 }
