@@ -7,7 +7,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.game.component.Move;
 import com.game.component.Physic;
-import com.game.component.Transform;
 
 public class PhysicMoveSystem extends IteratingSystem {
     private final Vector2 normalizedDirection = new Vector2();

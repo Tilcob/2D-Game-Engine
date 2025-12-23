@@ -21,35 +21,30 @@ public class ControllerSystem extends IteratingSystem {
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
         Controller controller = Controller.MAPPER.get(entity);
-        Move move = Move.MAPPER.get(entity);
-        if (controller.getPressedCommands().isEmpty() && controller.getReleasedCommands().isEmpty()) return;
-        if (move == null) return;
-        if (move.isRooted()) return;
-
-        float dx = move.getDirection().x;
-        float dy = move.getDirection().y;
+        if (controller.getPressedCommands().isEmpty() && controller.getReleasedCommands().isEmpty()) {
+            return;
+        }
 
         for (Command command : controller.getPressedCommands()) {
             switch (command) {
-                case UP -> dy = 1;
-                case DOWN -> dy = -1;
-                case LEFT -> dx = -1;
-                case RIGHT -> dx = 1;
+                case UP -> moveEntity(entity, 0f, 1f);
+                case DOWN -> moveEntity(entity, 0f, -1f);
+                case LEFT -> moveEntity(entity, -1f, 0f);
+                case RIGHT -> moveEntity(entity, 1f, 0f);
                 case SELECT -> startEntityAttack(entity);
                 case CANCEL -> game.setScreen(MenuScreen.class);
             }
         }
+        controller.getPressedCommands().clear();
 
         for (Command command : controller.getReleasedCommands()) {
             switch (command) {
-                case UP, DOWN -> dy = 0;
-                case LEFT, RIGHT -> dx = 0;
+                case UP -> moveEntity(entity, 0f, -1f);
+                case DOWN -> moveEntity(entity, 0f, 1f);
+                case LEFT -> moveEntity(entity, 1f, 0f);
+                case RIGHT -> moveEntity(entity, -1f, 0f);
             }
         }
-
-        move.getDirection().set(dx, dy);
-
-        controller.getPressedCommands().clear();
         controller.getReleasedCommands().clear();
     }
 
@@ -57,6 +52,14 @@ public class ControllerSystem extends IteratingSystem {
         Attack attack = Attack.MAPPER.get(entity);
         if (attack != null && attack.canAttack()) {
             attack.startAttack();
+        }
+    }
+
+    private void moveEntity(Entity entity, float dx, float dy) {
+        Move move = Move.MAPPER.get(entity);
+        if (move != null) {
+            move.getDirection().x += dx;
+            move.getDirection().y += dy;
         }
     }
 }

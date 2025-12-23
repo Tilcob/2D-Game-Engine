@@ -3,7 +3,6 @@ package com.game.system;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
@@ -13,7 +12,6 @@ import com.game.audio.AudioManager;
 import com.game.component.*;
 import com.game.config.Constants;
 import com.game.ui.model.GameViewModel;
-import com.game.ui.model.ViewModel;
 
 public class AttackSystem extends IteratingSystem {
     private static final Rectangle attackAABB = new Rectangle();
@@ -22,16 +20,14 @@ public class AttackSystem extends IteratingSystem {
     private final Vector2 tmpVertex;
     private Body attackerBody;
     private float attackDamage;
-    private final GameViewModel viewModel;
 
-    public AttackSystem(World world, AudioManager audioManager, GameViewModel viewModel) {
+    public AttackSystem(World world, AudioManager audioManager) {
         super(Family.all(Attack.class, Facing.class, Physic.class).get());
         this.world = world;
         this.audioManager = audioManager;
         this.tmpVertex = new Vector2();
         this.attackerBody = null;
         this.attackDamage = 0;
-        this.viewModel = viewModel;
     }
 
     @Override
@@ -45,13 +41,6 @@ public class AttackSystem extends IteratingSystem {
             Move move = Move.MAPPER.get(entity);
             if (move != null) {
                 move.setRooted(true);
-            }
-
-            Animation2D animation2D = Animation2D.MAPPER.get(entity);
-            if (animation2D != null) {
-                animation2D.setType(Animation2D.AnimationType.ATTACK);
-                animation2D.setPlayMode(Animation.PlayMode.NORMAL);
-                animation2D.setSpeed(1f);
             }
         }
 
