@@ -34,7 +34,7 @@
    <property name="atlasAsset" value="OBJECTS"/>
    <property name="attackSound" value="SWING"/>
    <property name="damage" type="float" value="7"/>
-   <property name="damageDelay" type="float" value="0.45"/>
+   <property name="damageDelay" type="float" value="0.2"/>
    <property name="life" type="int" value="12"/>
    <property name="lifeRegeneration" type="float" value="0.25"/>
    <property name="speed" type="float" value="4"/>
@@ -68,32 +68,16 @@
  </tile>
  <tile id="4" type="GameObject">
   <properties>
+   <property name="animation" value="IDLE"/>
+   <property name="animationSpeed" type="float" value="1"/>
    <property name="atlasAsset" value="OBJECTS"/>
-   <property name="life" type="int" value="12"/>
+   <property name="bodyType" propertytype="BodyType" value="StaticBody"/>
+   <property name="life" type="int" value="9999"/>
+   <property name="lifeRegeneration" type="float" value="99"/>
   </properties>
   <image source="objects/training_dummy.png" width="32" height="32"/>
   <objectgroup draworder="index" id="2">
    <object id="1" x="3" y="5" width="26" height="23"/>
-   <object id="2" name="attack_sensor_down" x="0" y="18" width="32" height="14">
-    <properties>
-     <property name="sensor" type="bool" value="true"/>
-    </properties>
-   </object>
-   <object id="3" name="attack_sensor_left" x="0" y="0" width="14" height="31.8182">
-    <properties>
-     <property name="sensor" type="bool" value="true"/>
-    </properties>
-   </object>
-   <object id="4" name="attack_sensor_right" x="0" y="0" width="14" height="31.8182">
-    <properties>
-     <property name="sensor" type="bool" value="true"/>
-    </properties>
-   </object>
-   <object id="5" name="attack_sensor_up" x="0" y="0" width="32" height="14">
-    <properties>
-     <property name="sensor" type="bool" value="true"/>
-    </properties>
-   </object>
   </objectgroup>
  </tile>
  <tile id="5" type="GameObject">

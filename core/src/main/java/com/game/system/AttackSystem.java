@@ -11,7 +11,6 @@ import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.game.audio.AudioManager;
 import com.game.component.*;
 import com.game.config.Constants;
-import com.game.ui.model.GameViewModel;
 
 public class AttackSystem extends IteratingSystem {
     private static final Rectangle attackAABB = new Rectangle();
