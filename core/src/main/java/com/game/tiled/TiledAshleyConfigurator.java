@@ -107,7 +107,9 @@ public class TiledAshleyConfigurator {
         if (Constants.PROP.equals(classType)) {
             return BodyDef.BodyType.StaticBody;
         }
-        return BodyDef.BodyType.DynamicBody;
+
+        String bodyTypeStr = tile.getProperties().get(Constants.BODY_TYPE, "DynamicBody", String.class);
+        return BodyDef.BodyType.valueOf(bodyTypeStr);
     }
 
     private void addEntityPhysic(MapObjects mapObjects, BodyDef.BodyType bodyType, Vector2 relativeTo, Entity entity) {

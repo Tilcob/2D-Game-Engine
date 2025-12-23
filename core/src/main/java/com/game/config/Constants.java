@@ -50,6 +50,7 @@ public class Constants {
     public static final String ATTACK_SENSOR = "attack_sensor_";
     public static final String PLAYER_NAME = "Player";
     public static final String ID = "id";
+    public static final String BODY_TYPE = "bodyType";
 
     // Map Properties
     public static final String MAP_WIDTH = "width";

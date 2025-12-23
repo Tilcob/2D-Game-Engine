@@ -11,6 +11,16 @@
     ],
     "propertyTypes": [
         {
+            "id": 5,
+            "name": "BodyType",
+            "storageType": "string",
+            "type": "enum",
+            "values": [
+                "StaticBody"
+            ],
+            "valuesAsFlags": false
+        },
+        {
             "color": "#ffa0a0a4",
             "drawFill": true,
             "id": 4,
