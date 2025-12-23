@@ -24,7 +24,7 @@ public class DamageSystem extends IteratingSystem {
         System.out.println("DamageSystem: processing entity " + entity);
 
         Life life = Life.MAPPER.get(entity);
-        if (life != null) life.aadLife(-damaged.getDamage());
+        if (life != null) life.addLife(-damaged.getDamage());
 
         Transform transform = Transform.MAPPER.get(entity);
         if (transform != null) {

@@ -44,7 +44,7 @@ public class LifeSystem extends IteratingSystem implements EntityListener {
         Life life = Life.MAPPER.get(entity);
         if (life.getLife() == life.getMaxLife()) return;
 
-        life.aadLife(life.getLifePerSec() * deltaTime);
+        life.addLife(life.getLifePerSec() * deltaTime);
         if (Player.MAPPER.get(entity) != null) {
             viewModel.updateLifeInfo(life.getMaxLife(), life.getLife());
         }

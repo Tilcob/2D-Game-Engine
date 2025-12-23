@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.EntitySystem;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -24,6 +25,7 @@ import com.game.tiled.TiledManager;
 import com.game.ui.model.GameViewModel;
 import com.game.ui.view.GameView;
 
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 public class GameScreen extends ScreenAdapter {
@@ -62,6 +64,7 @@ public class GameScreen extends ScreenAdapter {
         this.engine.addSystem(new DamageSystem(viewModel));
         this.engine.addSystem(new LifeSystem(viewModel));
         this.engine.addSystem(new AnimationSystem(game.getAssetManager()));
+        this.engine.addSystem(new TriggerSystem(audioManager));
         this.engine.addSystem(new CameraSystem(game.getCamera()));
         this.engine.addSystem(new RenderSystem(game.getBatch(), game.getViewport(), game.getCamera()));
         this.engine.addSystem(new PhysicDebugRenderSystem(physicWorld, game.getCamera()));
@@ -92,6 +95,7 @@ public class GameScreen extends ScreenAdapter {
         tiledManager.setMapChangeConsumer(renderConsumer.andThen(cameraConsumer).andThen(audioConsumer));
         tiledManager.setLoadObjectConsumer(tiledAshleyConfigurator::onLoadObject);
         tiledManager.setLoadTileConsumer(tiledAshleyConfigurator::onLoadTile);
+        tiledManager.setLoadTriggerConsumer(tiledAshleyConfigurator::onLoadTrigger);
 
         TiledMap map = tiledManager.loadMap(MapAsset.MAIN);
         tiledManager.setMap(map);
