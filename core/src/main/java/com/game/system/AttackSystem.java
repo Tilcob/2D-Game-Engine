@@ -40,11 +40,18 @@ public class AttackSystem extends IteratingSystem {
 
         if (attack.canAttack()) return;
 
-        if (attack.hasAttackStarted() && attack.getSfx() != null) {
-            audioManager.playSound(attack.getSfx());
+        if (attack.hasAttackStarted()) {
+            if (attack.getSfx() != null) audioManager.playSound(attack.getSfx());
             Move move = Move.MAPPER.get(entity);
             if (move != null) {
                 move.setRooted(true);
+            }
+
+            Animation2D animation2D = Animation2D.MAPPER.get(entity);
+            if (animation2D != null) {
+                animation2D.setType(Animation2D.AnimationType.ATTACK);
+                animation2D.setPlayMode(Animation.PlayMode.NORMAL);
+                animation2D.setSpeed(1f);
             }
         }
 
@@ -58,17 +65,11 @@ public class AttackSystem extends IteratingSystem {
             attackDamage = attack.getDamage();
             world.QueryAABB(this::attackCallback, attackAABB.x, attackAABB.y, attackAABB.width, attackAABB.height);
 
-            Animation2D animation2D = Animation2D.MAPPER.get(entity);
-            if (animation2D != null) {
-                animation2D.setType(Animation2D.AnimationType.ATTACK);
-                animation2D.setPlayMode(Animation.PlayMode.NORMAL);
-                animation2D.setSpeed(1f);
-            }
-
             Move move = Move.MAPPER.get(entity);
             if (move != null) {
                 move.setRooted(false);
             }
+
         }
     }
 
@@ -87,8 +88,6 @@ public class AttackSystem extends IteratingSystem {
 
         if (body.equals(attackerBody)) return true;
         if (!(body.getUserData() instanceof Entity entity)) return true;
-
-        //viewModel.playerDamage(10, body.getPosition().x, body.getPosition().y);
 
         Life life = Life.MAPPER.get(entity);
         if (life == null) {
