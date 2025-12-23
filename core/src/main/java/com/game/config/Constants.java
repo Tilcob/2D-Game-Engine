@@ -18,11 +18,9 @@ public class Constants {
 
     public static final float FIXED_INTERVAL = 1 / 60f;
 
-    // Light
-    public static final Vector3f AMBIENT_LIGHT = new Vector3f(.3f,.3f,.3f);
-
     // Tiled Layers
     public static final String OBJECT_LAYER = "objects";
+    public static final String TRIGGER_LAYER = "trigger";
     public static final String GROUND_LAYER = "ground";
     public static final String BACKGROUND_LAYER = "background";
     public static final String FORE_LAYER = "foreground";
@@ -42,7 +40,6 @@ public class Constants {
     public static final String RESTITUTION = "restitution";
     public static final String DENSITY = "density";
     public static final String SENSOR = "sensor";
-    public static final String TYPE = "type";   // That's the class (Klasse) field in Tiled
     public static final String PROP = "Prop";
     public static final String CAMERA_FOLLOW = "cameraFollow";
     public static final String LIFE = "life";
@@ -52,7 +49,7 @@ public class Constants {
     public static final String DAMAGE_DELAY = "damageDelay";
     public static final String ATTACK_SENSOR = "attack_sensor_";
     public static final String PLAYER_NAME = "Player";
-
+    public static final String ID = "id";
 
     // Map Properties
     public static final String MAP_WIDTH = "width";
@@ -60,6 +57,7 @@ public class Constants {
     public static final String TILE_WIDTH = "tilewidth";
     public static final String TILE_HEIGHT = "tileheight";
     public static final String MUSIC = "music";
+    public static final String TYPE = "type";   // That's the class (Klasse) field in Tiled
 
 
     // Box2D / Physics constants

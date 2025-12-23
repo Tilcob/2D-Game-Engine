@@ -2,11 +2,11 @@ package com.game.tiled;
 
 import com.badlogic.gdx.maps.MapLayer;
 import com.badlogic.gdx.maps.MapObject;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.objects.TiledMapTileMapObject;
-import com.badlogic.gdx.math.Polyline;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
@@ -15,6 +15,7 @@ import com.game.assets.AssetManager;
 import com.game.assets.MapAsset;
 import com.game.config.Constants;
 
+import java.util.function.BiConsumer;
 import java.util.function.Consumer;
 
 public class TiledManager {
@@ -23,6 +24,7 @@ public class TiledManager {
     private Consumer<TiledMap> mapChangeConsumer;
     private Consumer<TiledMapTileMapObject> loadObjectConsumer;
     private LoadTileConsumer loadTileConsumer;
+    private BiConsumer<String, MapObject> loadTriggerConsumer;
     private TiledMap currentMap;
 
     public TiledManager(AssetManager assetManager, World world) {
@@ -30,6 +32,7 @@ public class TiledManager {
         this.world = world;
         this.mapChangeConsumer = null;
         this.loadObjectConsumer = null;
+        this.loadTileConsumer = null;
         this.currentMap = null;
         this.loadTileConsumer = null;
     }
@@ -66,10 +69,27 @@ public class TiledManager {
                 loadObjectLayer(layer);
             } else if (layer instanceof TiledMapTileLayer tileLayer) {
                 loadTileLayer(tileLayer);
+            } else if (Constants.TRIGGER_LAYER.equals(layer.getName())) {
+                loadTriggerLayer(layer);
             }
         }
 
         spawnMapBoundary(tiledMap);
+    }
+
+    private void loadTriggerLayer(MapLayer layer) {
+        if (loadTriggerConsumer == null) return;
+
+        for (MapObject object : layer.getObjects()) {
+            if (object.getName() == null || object.getName().isBlank()) {
+                throw new GdxRuntimeException("Trigger must have a name: " + object);
+            }
+            if (object instanceof RectangleMapObject rectMapObject) {
+                loadTriggerConsumer.accept(object.getName(), rectMapObject);
+            } else {
+                throw new GdxRuntimeException("Unsupported trigger object: " + object);
+            }
+        }
     }
 
     private void spawnMapBoundary(TiledMap tiledMap) {
@@ -147,6 +167,10 @@ public class TiledManager {
 
     public void setLoadTileConsumer(LoadTileConsumer loadTileConsumer) {
         this.loadTileConsumer = loadTileConsumer;
+    }
+
+    public void setLoadTriggerConsumer(BiConsumer<String, MapObject> loadTriggerConsumer) {
+        this.loadTriggerConsumer = loadTriggerConsumer;
     }
 
     @FunctionalInterface

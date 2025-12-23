@@ -17,7 +17,7 @@ public class Life implements Component {
         this.lifePerSec = lifePerSec;
     }
 
-    public void aadLife(float value) {
+    public void addLife(float value) {
         life = MathUtils.clamp(life + value, 0f, maxLife);
     }
 

@@ -9,8 +9,10 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.FileTextureData;
 import com.badlogic.gdx.maps.MapObject;
 import com.badlogic.gdx.maps.MapObjects;
+import com.badlogic.gdx.maps.objects.RectangleMapObject;
 import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.objects.TiledMapTileMapObject;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.game.assets.AssetManager;
@@ -24,11 +26,15 @@ public class TiledAshleyConfigurator {
     private final Engine engine;
     private final AssetManager assetManager;
     private final World world;
+    private final Vector2 tmpVec2;
+    private final MapObjects tmpMapObjects;
 
     public TiledAshleyConfigurator(Engine engine, AssetManager assetManager, World world) {
         this.engine = engine;
         this.assetManager = assetManager;
         this.world = world;
+        this.tmpVec2 = new Vector2();
+        this.tmpMapObjects = new MapObjects();
     }
 
     public void onLoadObject(TiledMapTileMapObject object) {
@@ -54,6 +60,7 @@ public class TiledAshleyConfigurator {
         addEntityAttack(tile, entity);
         entity.add(new Facing(Facing.FacingDirection.DOWN));
         entity.add(new Fsm(entity));
+        entity.add(new Tiled(object));
 
         engine.addEntity(entity);
     }
@@ -112,6 +119,12 @@ public class TiledAshleyConfigurator {
 
         Body body = createBody(mapObjects, position, scaling, bodyType, relativeTo, entity);
         entity.add(new Physic(body, transform.getPosition().cpy()));
+    }
+
+    private void addEntityPhysic(MapObject mapObject, BodyDef.BodyType bodyType, Vector2 relativeTo, Entity entity) {
+        if (tmpMapObjects.getCount() > 0) tmpMapObjects.remove(0);
+        tmpMapObjects.add(mapObject);
+        addEntityPhysic(tmpMapObjects, bodyType, relativeTo, entity);
     }
 
     private void addEntityAnimation(TiledMapTile tile, Entity entity) {
@@ -201,5 +214,28 @@ public class TiledAshleyConfigurator {
 
         }
         return body;
+    }
+
+    public void onLoadTrigger(String triggerName, MapObject triggerMapObject) {
+        if (triggerMapObject instanceof RectangleMapObject rectMapObject) {
+            Entity entity = engine.createEntity();
+            Rectangle rectangle = rectMapObject.getRectangle();
+
+            addEntityTransform(
+                rectangle.getX(), rectangle.getY(), 0,
+                rectangle.getWidth(), rectangle.getHeight(),
+                1, 1, entity
+            );
+            addEntityPhysic(
+                triggerMapObject, BodyDef.BodyType.StaticBody,
+                tmpVec2.set(rectangle.getX(), rectangle.getY()).scl(Constants.UNIT_SCALE), entity
+            );
+            entity.add(new Trigger(triggerName));
+            entity.add(new Tiled(rectMapObject));
+
+            engine.addEntity(entity);
+        } else {
+            throw new IllegalArgumentException("Unsupported trigger map object: " + triggerMapObject);
+        }
     }
 }

@@ -3,6 +3,8 @@ package com.game.system;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.game.component.Animation2D;
 import com.game.component.Damaged;
 import com.game.component.Life;
 import com.game.component.Transform;
@@ -24,7 +26,7 @@ public class DamageSystem extends IteratingSystem {
         System.out.println("DamageSystem: processing entity " + entity);
 
         Life life = Life.MAPPER.get(entity);
-        if (life != null) life.aadLife(-damaged.getDamage());
+        if (life != null) life.addLife(-damaged.getDamage());
 
         Transform transform = Transform.MAPPER.get(entity);
         if (transform != null) {
